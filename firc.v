@@ -1,4 +1,4 @@
-// DA_TODO : Need to remove as it is giving compile error 
+// DA_TODO : Need to remove as it is giving compile error
 `include "DW02_mult_2_stage.v"
 ///////////////////////////////////////////////////////////////////////////////
 // Module : firc
@@ -25,33 +25,143 @@ module firc (input  wire               Clk,
   reg signed [23:0] shift_reg_i[29];
   reg signed [23:0] shift_reg_q[29];
 
-  reg [4:0] addr_0_loc_a, addr_1_loc_a, addr_2_loc_a,  addr_3_loc_a, addr_4_loc_a; 
-  reg [4:0] addr_0_loc_b, addr_1_loc_b, addr_2_loc_b,  addr_3_loc_b, addr_4_loc_b; 
+  reg [4:0] addr_0_loc_a, addr_1_loc_a, addr_2_loc_a,  addr_3_loc_a, addr_4_loc_a;
+  reg [4:0] addr_0_loc_b, addr_1_loc_b, addr_2_loc_b,  addr_3_loc_b, addr_4_loc_b;
 
-  reg [23:0] a2m_i_0, a2m_i_1, a2m_i_2, a2m_i_3, a2m_i_4; 
-  reg [23:0] a2m_q_0, a2m_q_1, a2m_q_2, a2m_q_3, a2m_q_4; 
+  reg [23:0] a2m_i_0, a2m_i_1, a2m_i_2, a2m_i_3, a2m_i_4;
+  reg [23:0] a2m_q_0, a2m_q_1, a2m_q_2, a2m_q_3, a2m_q_4;
+
+  reg fifo_rd_en;
+
+  // Separate connection for Adder_4_B as for 3rd multiply, it should be zero.
+  reg signed [23:0] addr_4_b_i, addr_4_b_q;
+
+  // STATE PARAMETERS
+  parameter ST_RESET = 2'b00, ST_MUL_0 = 2'b01, ST_MUL_1 = 2'b10, ST_MUL_2 = 2'b11;
+  reg [1:0] curr_state, next_state;
+
+  // Module assignments
 
   // DA_TODO
   // Assign output wire
-
   // assign PushOut = ;
   // assign FI = ;
   // assign FQ = ;
 
-  // Module Instances
-  fifo ip_fifo(.clk(Clk), .rst(Reset), .rd(), .wr(~StopIn), .write_data1(SampI), .write_data2(SampQ), .empty(), .full(StopIn), .read_data1(shift_reg_i[0]), .read_data2(shift_reg_q[0]));
 
-  pre_mult_adder addr_0 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_0_loc_a]), .a_q(shift_reg_q[addr_0_loc_a]), .b_i(shift_reg_i[addr_0_loc_b]), .b_q(shift_reg_q[addr_0_loc_b]), .o_i(a2m_i_0), .o_q(a2m_q_0)); 
-  pre_mult_adder addr_1 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_1_loc_a]), .a_q(shift_reg_q[addr_1_loc_a]), .b_i(shift_reg_i[addr_1_loc_b]), .b_q(shift_reg_q[addr_1_loc_b]), .o_i(a2m_i_1), .o_q(a2m_q_1)); 
-  pre_mult_adder addr_2 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_2_loc_a]), .a_q(shift_reg_q[addr_2_loc_a]), .b_i(shift_reg_i[addr_2_loc_b]), .b_q(shift_reg_q[addr_2_loc_b]), .o_i(a2m_i_2), .o_q(a2m_q_2)); 
-  pre_mult_adder addr_3 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_3_loc_a]), .a_q(shift_reg_q[addr_3_loc_a]), .b_i(shift_reg_i[addr_3_loc_b]), .b_q(shift_reg_q[addr_3_loc_b]), .o_i(a2m_i_3), .o_q(a2m_q_3)); 
-  pre_mult_adder addr_4 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_4_loc_a]), .a_q(shift_reg_q[addr_4_loc_a]), .b_i(shift_reg_i[addr_4_loc_b]), .b_q(shift_reg_q[addr_4_loc_b]), .o_i(a2m_i_4), .o_q(a2m_q_4)); 
+  // Module Instances
+  fifo ip_fifo(.clk(Clk), .rst(Reset), .rd(fifo_rd_en), .wr(~StopIn), .write_data1(SampI), .write_data2(SampQ), .empty(), .full(StopIn), .read_data1(shift_reg_i[0]), .read_data2(shift_reg_q[0]));
+
+  pre_mult_adder addr_0 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_0_loc_a]), .a_q(shift_reg_q[addr_0_loc_a]), .b_i(shift_reg_i[addr_0_loc_b]), .b_q(shift_reg_q[addr_0_loc_b]), .o_i(a2m_i_0), .o_q(a2m_q_0));
+  pre_mult_adder addr_1 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_1_loc_a]), .a_q(shift_reg_q[addr_1_loc_a]), .b_i(shift_reg_i[addr_1_loc_b]), .b_q(shift_reg_q[addr_1_loc_b]), .o_i(a2m_i_1), .o_q(a2m_q_1));
+  pre_mult_adder addr_2 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_2_loc_a]), .a_q(shift_reg_q[addr_2_loc_a]), .b_i(shift_reg_i[addr_2_loc_b]), .b_q(shift_reg_q[addr_2_loc_b]), .o_i(a2m_i_2), .o_q(a2m_q_2));
+  pre_mult_adder addr_3 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_3_loc_a]), .a_q(shift_reg_q[addr_3_loc_a]), .b_i(shift_reg_i[addr_3_loc_b]), .b_q(shift_reg_q[addr_3_loc_b]), .o_i(a2m_i_3), .o_q(a2m_q_3));
+  pre_mult_adder addr_4 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_4_loc_a]), .a_q(shift_reg_q[addr_4_loc_a]), .b_i(addr_4_b_i),                .b_q(addr_4_b_q),                .o_i(a2m_i_4), .o_q(a2m_q_4));
 
   ComplexMult cm_0(.clk(Clk), .reset(Reset), .data_i(a2m_i_0), .data_q(a2m_q_0), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
   ComplexMult cm_1(.clk(Clk), .reset(Reset), .data_i(a2m_i_1), .data_q(a2m_q_1), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
   ComplexMult cm_2(.clk(Clk), .reset(Reset), .data_i(a2m_i_2), .data_q(a2m_q_2), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
   ComplexMult cm_3(.clk(Clk), .reset(Reset), .data_i(a2m_i_3), .data_q(a2m_q_3), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
   ComplexMult cm_4(.clk(Clk), .reset(Reset), .data_i(a2m_i_4), .data_q(a2m_q_4), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
+
+  //State Machine
+  always @ (posedge Clk or posedge Reset)
+  begin
+    if(Reset)
+    begin
+      curr_state <= ST_RESET;
+    end
+    else
+    begin
+      curr_state <= next_state;
+    end
+  end
+
+  always @ (*)
+  begin
+    case(curr_state)
+      ST_RESET :
+      begin
+        addr_0_loc_a = 0;
+        addr_1_loc_a = 0;
+        addr_2_loc_a = 0;
+        addr_3_loc_a = 0;
+        addr_4_loc_a = 0;
+
+        addr_0_loc_b = 0;
+        addr_1_loc_b = 0;
+        addr_2_loc_b = 0;
+        addr_3_loc_b = 0;
+        addr_4_loc_b = 0;
+
+        fifo_rd_en = 0;
+        addr_4_b_i = 24'b0;
+        addr_4_b_q = 24'b0;
+
+        next_state = ST_MUL_0;
+      end
+      ST_MUL_0 :
+      begin
+        addr_0_loc_a = 0;
+        addr_1_loc_a = 1;
+        addr_2_loc_a = 2;
+        addr_3_loc_a = 3;
+        addr_4_loc_a = 4;
+
+        addr_0_loc_b = 28;
+        addr_1_loc_b = 27;
+        addr_2_loc_b = 26;
+        addr_3_loc_b = 25;
+        addr_4_loc_b = 24;
+
+        fifo_rd_en = 1;
+        addr_4_b_i = shift_reg_i[addr_4_loc_b];
+        addr_4_b_q = shift_reg_q[addr_4_loc_b];
+
+        next_state = ST_MUL_1;
+      end
+      ST_MUL_1 :
+      begin
+        addr_0_loc_a = 5;
+        addr_1_loc_a = 6;
+        addr_2_loc_a = 7;
+        addr_3_loc_a = 8;
+        addr_4_loc_a = 9;
+
+        addr_0_loc_b = 23;
+        addr_1_loc_b = 22;
+        addr_2_loc_b = 21;
+        addr_3_loc_b = 20;
+        addr_4_loc_b = 19;
+
+        fifo_rd_en = 0;
+        addr_4_b_i = shift_reg_i[addr_4_loc_b];
+        addr_4_b_q = shift_reg_q[addr_4_loc_b];
+
+        next_state = ST_MUL_2;
+      end
+      ST_MUL_2 :
+      begin
+        addr_0_loc_a = 10;
+        addr_1_loc_a = 11;
+        addr_2_loc_a = 12;
+        addr_3_loc_a = 13;
+        addr_4_loc_a = 14;
+
+        addr_0_loc_b = 18;
+        addr_1_loc_b = 17;
+        addr_2_loc_b = 16;
+        addr_3_loc_b = 15;
+        addr_4_loc_b = 14;
+
+        fifo_rd_en = 0;
+        addr_4_b_i = 24'b0;
+        addr_4_b_q = 24'b0;
+
+        next_state = ST_MUL_0;
+      end
+    endcase
+  end
 
 endmodule
 
@@ -217,8 +327,8 @@ module pre_mult_adder(input                    clk,
      else
      begin
        o_i <= a_i + b_i;
-       o_q <= a_q + b_q; 
+       o_q <= a_q + b_q;
      end
    end
 
-endmodule 
+endmodule
