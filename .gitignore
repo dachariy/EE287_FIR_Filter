@@ -1,0 +1,7 @@
+csrc/
+fir.vcd
+sim.log
+simv
+simv.daidir/
+ucli.key
+*.swp
