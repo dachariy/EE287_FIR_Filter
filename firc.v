@@ -22,8 +22,11 @@ module firc (input  wire               Clk,
              output wire        [31:0] FQ);
 
   // Wires and regs
-  reg signed [23:0] shift_reg_i[29];
-  reg signed [23:0] shift_reg_q[29];
+  reg signed [23:0] shift_reg_i[28:0];
+  reg signed [23:0] shift_reg_q[28:0];
+
+  wire signed [23:0] shift_reg_i_0;
+  wire signed [23:0] shift_reg_q_0;
 
   reg [4:0] addr_0_loc_a, addr_1_loc_a, addr_2_loc_a,  addr_3_loc_a, addr_4_loc_a;
   reg [4:0] addr_0_loc_b, addr_1_loc_b, addr_2_loc_b,  addr_3_loc_b, addr_4_loc_b;
@@ -50,7 +53,7 @@ module firc (input  wire               Clk,
 
 
   // Module Instances
-  fifo ip_fifo(.clk(Clk), .rst(Reset), .rd(fifo_rd_en), .wr(~StopIn), .write_data1(SampI), .write_data2(SampQ), .empty(), .full(StopIn), .read_data1(shift_reg_i[0]), .read_data2(shift_reg_q[0]));
+  fifo ip_fifo(.clk(Clk), .rst(Reset), .rd(fifo_rd_en), .wr(PushIn), .write_data1(SampI), .write_data2(SampQ), .empty(), .full(StopIn), .read_data1(shift_reg_i_0), .read_data2(shift_reg_q_0));
 
   pre_mult_adder addr_0 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_0_loc_a]), .a_q(shift_reg_q[addr_0_loc_a]), .b_i(shift_reg_i[addr_0_loc_b]), .b_q(shift_reg_q[addr_0_loc_b]), .o_i(a2m_i_0), .o_q(a2m_q_0));
   pre_mult_adder addr_1 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_1_loc_a]), .a_q(shift_reg_q[addr_1_loc_a]), .b_i(shift_reg_i[addr_1_loc_b]), .b_q(shift_reg_q[addr_1_loc_b]), .o_i(a2m_i_1), .o_q(a2m_q_1));
@@ -63,6 +66,25 @@ module firc (input  wire               Clk,
   ComplexMult cm_2(.clk(Clk), .reset(Reset), .data_i(a2m_i_2), .data_q(a2m_q_2), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
   ComplexMult cm_3(.clk(Clk), .reset(Reset), .data_i(a2m_i_3), .data_q(a2m_q_3), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
   ComplexMult cm_4(.clk(Clk), .reset(Reset), .data_i(a2m_i_4), .data_q(a2m_q_4), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
+
+  always@(posedge(Clk) or posedge(Reset))
+  begin                                                     
+    if(Reset)
+    begin
+      //Resets Sample Registers
+      for(int i=0;i<29;i+=1)
+      begin
+        shift_reg_i[i] <= 24'b0; 
+        shift_reg_q[i] <= 24'b0; 
+      end
+    end
+    // Storing Samples 
+    else if(curr_state == ST_MUL_0) 
+    begin
+      shift_reg_i <= {shift_reg_i[27:0], shift_reg_i_0};
+      shift_reg_q <= {shift_reg_q[27:0], shift_reg_q_0};
+    end
+  end
 
   //State Machine
   always @ (posedge Clk or posedge Reset)
