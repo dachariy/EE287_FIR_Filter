@@ -1,5 +1,3 @@
-// DA_TODO : Need to remove as it is giving compile error
-`include "DW02_mult_2_stage.v"
 ///////////////////////////////////////////////////////////////////////////////
 // Module : firc
 //
@@ -35,6 +33,7 @@ module firc (input  wire               Clk,
   reg [23:0] a2m_q_0, a2m_q_1, a2m_q_2, a2m_q_3, a2m_q_4;
 
   reg fifo_rd_en;
+  wire fifo_empty;
 
   // Separate connection for Adder_4_B as for 3rd multiply, it should be zero.
   reg signed [23:0] addr_4_b_i, addr_4_b_q;
@@ -53,7 +52,7 @@ module firc (input  wire               Clk,
 
 
   // Module Instances
-  fifo ip_fifo(.clk(Clk), .rst(Reset), .rd(fifo_rd_en), .wr(PushIn), .write_data1(SampI), .write_data2(SampQ), .empty(), .full(StopIn), .read_data1(shift_reg_i_0), .read_data2(shift_reg_q_0));
+  fifo ip_fifo(.clk(Clk), .rst(Reset), .rd(fifo_rd_en), .wr(PushIn), .write_data1(SampI), .write_data2(SampQ), .empty(fifo_empty), .full(StopIn), .read_data1(shift_reg_i_0), .read_data2(shift_reg_q_0));
 
   pre_mult_adder addr_0 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_0_loc_a]), .a_q(shift_reg_q[addr_0_loc_a]), .b_i(shift_reg_i[addr_0_loc_b]), .b_q(shift_reg_q[addr_0_loc_b]), .o_i(a2m_i_0), .o_q(a2m_q_0));
   pre_mult_adder addr_1 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_1_loc_a]), .a_q(shift_reg_q[addr_1_loc_a]), .b_i(shift_reg_i[addr_1_loc_b]), .b_q(shift_reg_q[addr_1_loc_b]), .o_i(a2m_i_1), .o_q(a2m_q_1));
@@ -68,18 +67,18 @@ module firc (input  wire               Clk,
   ComplexMult cm_4(.clk(Clk), .reset(Reset), .data_i(a2m_i_4), .data_q(a2m_q_4), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
 
   always@(posedge(Clk) or posedge(Reset))
-  begin                                                     
+  begin
     if(Reset)
     begin
       //Resets Sample Registers
       for(int i=0;i<29;i+=1)
       begin
-        shift_reg_i[i] <= 24'b0; 
-        shift_reg_q[i] <= 24'b0; 
+        shift_reg_i[i] <= 24'b0;
+        shift_reg_q[i] <= 24'b0;
       end
     end
-    // Storing Samples 
-    else if(curr_state == ST_MUL_0) 
+    // Storing Samples
+    else if(curr_state == ST_MUL_0 && fifo_empty == 0)
     begin
       shift_reg_i <= {shift_reg_i[27:0], shift_reg_i_0};
       shift_reg_q <= {shift_reg_q[27:0], shift_reg_q_0};
