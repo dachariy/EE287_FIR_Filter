@@ -19,9 +19,18 @@ module firc (input  wire               Clk,
              output wire        [31:0] FI,
              output wire        [31:0] FQ);
 
+
   // Wires and regs
+  // Sample regs
   reg signed [23:0] shift_reg_i[28:0];
   reg signed [23:0] shift_reg_q[28:0];
+
+  // Coefficient regs
+  reg [26:0] CoefIMem [15:0];
+  reg [26:0] CoefQMem [15:0];
+
+  reg [26:0] i_coef_reg1, i_coef_reg2, i_coef_reg3, i_coef_reg4, i_coef_reg5;
+  reg [26:0] q_coef_reg1, q_coef_reg2, q_coef_reg3, q_coef_reg4, q_coef_reg5;
 
   wire signed [23:0] shift_reg_i_0;
   wire signed [23:0] shift_reg_q_0;
@@ -31,6 +40,8 @@ module firc (input  wire               Clk,
 
   reg [23:0] a2m_i_0, a2m_i_1, a2m_i_2, a2m_i_3, a2m_i_4;
   reg [23:0] a2m_q_0, a2m_q_1, a2m_q_2, a2m_q_3, a2m_q_4;
+
+
 
   reg fifo_rd_en;
   wire fifo_empty;
@@ -60,12 +71,31 @@ module firc (input  wire               Clk,
   pre_mult_adder addr_3 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_3_loc_a]), .a_q(shift_reg_q[addr_3_loc_a]), .b_i(shift_reg_i[addr_3_loc_b]), .b_q(shift_reg_q[addr_3_loc_b]), .o_i(a2m_i_3), .o_q(a2m_q_3));
   pre_mult_adder addr_4 (.clk(Clk), .reset(Reset), .a_i(shift_reg_i[addr_4_loc_a]), .a_q(shift_reg_q[addr_4_loc_a]), .b_i(addr_4_b_i),                .b_q(addr_4_b_q),                .o_i(a2m_i_4), .o_q(a2m_q_4));
 
-  ComplexMult cm_0(.clk(Clk), .reset(Reset), .data_i(a2m_i_0), .data_q(a2m_q_0), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
-  ComplexMult cm_1(.clk(Clk), .reset(Reset), .data_i(a2m_i_1), .data_q(a2m_q_1), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
-  ComplexMult cm_2(.clk(Clk), .reset(Reset), .data_i(a2m_i_2), .data_q(a2m_q_2), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
-  ComplexMult cm_3(.clk(Clk), .reset(Reset), .data_i(a2m_i_3), .data_q(a2m_q_3), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
-  ComplexMult cm_4(.clk(Clk), .reset(Reset), .data_i(a2m_i_4), .data_q(a2m_q_4), .coef_i(), .coef_q(), .mult_out_i(), .mult_out_q());
+  ComplexMult cm_0(.clk(Clk), .reset(Reset), .data_i(a2m_i_0), .data_q(a2m_q_0), .coef_i(i_coef_reg1), .coef_q(q_coef_reg1), .mult_out_i(), .mult_out_q());
+  ComplexMult cm_1(.clk(Clk), .reset(Reset), .data_i(a2m_i_1), .data_q(a2m_q_1), .coef_i(i_coef_reg2), .coef_q(q_coef_reg2), .mult_out_i(), .mult_out_q());
+  ComplexMult cm_2(.clk(Clk), .reset(Reset), .data_i(a2m_i_2), .data_q(a2m_q_2), .coef_i(i_coef_reg3), .coef_q(q_coef_reg3), .mult_out_i(), .mult_out_q());
+  ComplexMult cm_3(.clk(Clk), .reset(Reset), .data_i(a2m_i_3), .data_q(a2m_q_3), .coef_i(i_coef_reg4), .coef_q(q_coef_reg4), .mult_out_i(), .mult_out_q());
+  ComplexMult cm_4(.clk(Clk), .reset(Reset), .data_i(a2m_i_4), .data_q(a2m_q_4), .coef_i(i_coef_reg5), .coef_q(q_coef_reg5), .mult_out_i(), .mult_out_q());
 
+  //Coefficient Handling
+  always@(posedge(Clk) or posedge(Reset))begin
+    if(Reset)begin
+      //Resets Coefficients
+      for(int i=0;i<16;i+=1)begin
+        CoefIMem[i] <= 27'b0;
+        CoefQMem[i] <= 27'b0;
+     end
+    end
+    //Stores Coefficients
+    else if(PushCoef==1)begin
+      CoefIMem[CoefAddr] <= CoefI;
+      CoefQMem[CoefAddr] <= CoefQ;
+
+    end
+
+  end
+
+  // Sample Handling
   always@(posedge(Clk) or posedge(Reset))
   begin
     if(Reset)
@@ -91,10 +121,34 @@ module firc (input  wire               Clk,
     if(Reset)
     begin
       curr_state <= ST_RESET;
+
+      i_coef_reg1 <=0;
+      i_coef_reg2 <=0;
+      i_coef_reg3 <=0;
+      i_coef_reg4 <=0;
+      i_coef_reg5 <=0;
+
+      q_coef_reg1 <=0;
+      q_coef_reg2 <=0;
+      q_coef_reg3 <=0;
+      q_coef_reg4 <=0;
+      q_coef_reg5 <=0;
     end
     else
     begin
       curr_state <= next_state;
+
+      i_coef_reg1 <=i_coef_reg1_d;
+      i_coef_reg2 <=i_coef_reg2_d;
+      i_coef_reg3 <=i_coef_reg3_d;
+      i_coef_reg4 <=i_coef_reg4_d;
+      i_coef_reg5 <=i_coef_reg5_d;
+
+      q_coef_reg1 <=q_coef_reg1_d;
+      q_coef_reg2 <=q_coef_reg2_d;
+      q_coef_reg3 <=q_coef_reg3_d;
+      q_coef_reg4 <=q_coef_reg4_d;
+      q_coef_reg5 <=q_coef_reg5_d;
     end
   end
 
@@ -103,6 +157,18 @@ module firc (input  wire               Clk,
     case(curr_state)
       ST_RESET :
       begin
+        i_coef_reg1_d = 0;
+        i_coef_reg2_d = 0;
+        i_coef_reg3_d = 0;
+        i_coef_reg4_d = 0;
+        i_coef_reg5_d = 0;
+
+        q_coef_reg1_d = 0;
+        q_coef_reg2_d = 0;
+        q_coef_reg3_d = 0;
+        q_coef_reg4_d = 0;
+        q_coef_reg5_d = 0;
+
         addr_0_loc_a = 0;
         addr_1_loc_a = 0;
         addr_2_loc_a = 0;
@@ -135,6 +201,19 @@ module firc (input  wire               Clk,
         addr_3_loc_b = 25;
         addr_4_loc_b = 24;
 
+        i_coef_reg1_d = CoefIMem[0];
+        i_coef_reg2_d = CoefIMem[1];
+        i_coef_reg3_d = CoefIMem[2];
+        i_coef_reg4_d = CoefIMem[3];
+        i_coef_reg5_d = CoefIMem[4];
+
+        q_coef_reg1_d = CoefQMem[0];
+        q_coef_reg2_d = CoefQMem[1];
+        q_coef_reg3_d = CoefQMem[2];
+        q_coef_reg4_d = CoefQMem[3];
+        q_coef_reg5_d = CoefQMem[4];
+
+
         fifo_rd_en = 1;
         addr_4_b_i = shift_reg_i[addr_4_loc_b];
         addr_4_b_q = shift_reg_q[addr_4_loc_b];
@@ -143,6 +222,18 @@ module firc (input  wire               Clk,
       end
       ST_MUL_1 :
       begin
+        i_coef_reg1_d = CoefIMem[5];
+        i_coef_reg2_d = CoefIMem[6];
+        i_coef_reg3_d = CoefIMem[7];
+        i_coef_reg4_d = CoefIMem[8];
+        i_coef_reg5_d = CoefIMem[9];
+
+        q_coef_reg1_d = CoefQMem[5];
+        q_coef_reg2_d = CoefQMem[6];
+        q_coef_reg3_d = CoefQMem[7];
+        q_coef_reg4_d = CoefQMem[8];
+        q_coef_reg5_d = CoefQMem[9];
+
         addr_0_loc_a = 5;
         addr_1_loc_a = 6;
         addr_2_loc_a = 7;
@@ -163,6 +254,18 @@ module firc (input  wire               Clk,
       end
       ST_MUL_2 :
       begin
+        i_coef_reg1_d = CoefIMem[10];
+        i_coef_reg2_d = CoefIMem[11];
+        i_coef_reg3_d = CoefIMem[12];
+        i_coef_reg4_d = CoefIMem[13];
+        i_coef_reg5_d = CoefIMem[14];
+
+        q_coef_reg1_d = CoefQMem[10];
+        q_coef_reg2_d = CoefQMem[11];
+        q_coef_reg3_d = CoefQMem[12];
+        q_coef_reg4_d = CoefQMem[13];
+        q_coef_reg5_d = CoefQMem[14];
+
         addr_0_loc_a = 10;
         addr_1_loc_a = 11;
         addr_2_loc_a = 12;
