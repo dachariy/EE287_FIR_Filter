@@ -28,20 +28,20 @@ module firc (input  wire               Clk,
   reg signed [23:0] shift_reg_i[28:0];
   reg signed [23:0] shift_reg_q[28:0];
   
-  wire [26:0] dbg_coeff_i_0, dbg_coeff_q_0;
-  wire [26:0] dbg_coeff_i_1, dbg_coeff_q_1;
-  wire [26:0] dbg_coeff_i_2, dbg_coeff_q_2;
-  wire [26:0] dbg_coeff_i_3, dbg_coeff_q_3;
-  wire [26:0] dbg_coeff_i_4, dbg_coeff_q_4;
-  wire [26:0] dbg_coeff_i_5, dbg_coeff_q_5;
-  wire [26:0] dbg_coeff_i_6, dbg_coeff_q_6;
-  wire [26:0] dbg_coeff_i_7, dbg_coeff_q_7;
-  wire [26:0] dbg_coeff_i_8, dbg_coeff_q_8;
-  wire [26:0] dbg_coeff_i_9, dbg_coeff_q_9;
-  wire [26:0] dbg_coeff_i_10, dbg_coeff_q_10;
-  wire [26:0] dbg_coeff_i_11, dbg_coeff_q_11;
-  wire [26:0] dbg_coeff_i_12, dbg_coeff_q_12;
-  wire [26:0] dbg_coeff_i_13, dbg_coeff_q_13;
+  wire [26:0] dbg_coeff_i_0, dbg_coeff_q_0;
+  wire [26:0] dbg_coeff_i_1, dbg_coeff_q_1;
+  wire [26:0] dbg_coeff_i_2, dbg_coeff_q_2;
+  wire [26:0] dbg_coeff_i_3, dbg_coeff_q_3;
+  wire [26:0] dbg_coeff_i_4, dbg_coeff_q_4;
+  wire [26:0] dbg_coeff_i_5, dbg_coeff_q_5;
+  wire [26:0] dbg_coeff_i_6, dbg_coeff_q_6;
+  wire [26:0] dbg_coeff_i_7, dbg_coeff_q_7;
+  wire [26:0] dbg_coeff_i_8, dbg_coeff_q_8;
+  wire [26:0] dbg_coeff_i_9, dbg_coeff_q_9;
+  wire [26:0] dbg_coeff_i_10, dbg_coeff_q_10;
+  wire [26:0] dbg_coeff_i_11, dbg_coeff_q_11;
+  wire [26:0] dbg_coeff_i_12, dbg_coeff_q_12;
+  wire [26:0] dbg_coeff_i_13, dbg_coeff_q_13;
   wire [26:0] dbg_coeff_i_14, dbg_coeff_q_14;
   
   wire [23:0] dbg_shift_reg_i_0, dbg_shift_reg_q_0;
