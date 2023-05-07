@@ -1,0 +1,93 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Sun May  7 00:20:52 2023
+[*]
+[dumpfile] "/home/014558648@SJSUAD.SJSU.EDU/Documents/EE287/Project/EE287_FIR_Filter/fir.vcd"
+[dumpfile_mtime] "Sun May  7 00:06:52 2023"
+[dumpfile_size] 130742
+[savefile] "/home/014558648@SJSUAD.SJSU.EDU/Documents/EE287/Project/EE287_FIR_Filter/debug.gtkw"
+[timestart] 946400
+[size] 1920 977
+[pos] -1 -1
+*-15.420608 1110000 961000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.fir1.
+[sst_width] 363
+[signals_width] 350
+[sst_expanded] 1
+[sst_vpaned_height] 373
+@28
+top.fir1.Clk
+top.fir1.Reset
+top.fir1.PushCoef
+@22
+top.fir1.CoefAddr[4:0]
+top.fir1.CoefI[26:0]
+top.fir1.CoefQ[26:0]
+@28
+top.fir1.PushIn
+@22
+top.fir1.SampI[23:0]
+top.fir1.SampQ[23:0]
+@28
+top.fir1.StopIn
+@22
+top.fir1.FI[31:0]
+top.fir1.FQ[31:0]
+@28
+top.fir1.PushOut
+@200
+-
+@28
+top.fir1.curr_state[1:0]
+@200
+-
+@28
+top.fir1.ip_fifo.clk
+top.fir1.ip_fifo.rst
+top.fir1.ip_fifo.wr
+top.fir1.ip_fifo.full
+@22
+top.fir1.ip_fifo.write_data1[23:0]
+top.fir1.ip_fifo.write_data2[23:0]
+@28
+top.fir1.ip_fifo.rd
+top.fir1.ip_fifo.empty
+@22
+top.fir1.ip_fifo.read_data1[23:0]
+top.fir1.ip_fifo.read_data2[23:0]
+@200
+-
+@22
+top.fir1.shift_reg_i_0[23:0]
+top.fir1.shift_reg_q_0[23:0]
+@200
+-
+@28
+top.fir1.pre_add_0.clk
+top.fir1.pre_add_0.reset
+@22
+top.fir1.pre_add_0.a_i[23:0]
+top.fir1.pre_add_0.a_q[23:0]
+top.fir1.pre_add_0.b_i[23:0]
+top.fir1.pre_add_0.b_q[23:0]
+top.fir1.pre_add_0.o_i[23:0]
+top.fir1.pre_add_0.o_q[23:0]
+@200
+-
+@28
+top.fir1.cm_0.clk
+top.fir1.cm_0.reset
+@22
+top.fir1.cm_0.coef_i[26:0]
+top.fir1.cm_0.coef_q[26:0]
+top.fir1.cm_0.data_i[23:0]
+top.fir1.cm_0.data_q[23:0]
+top.fir1.cm_0.prod_ac[53:0]
+top.fir1.cm_0.prod_ad[53:0]
+top.fir1.cm_0.prod_bc[53:0]
+top.fir1.cm_0.prod_bd[53:0]
+top.fir1.cm_0.mult_out_i[53:0]
+top.fir1.cm_0.mult_out_q[53:0]
+[pattern_trace] 1
+[pattern_trace] 0
