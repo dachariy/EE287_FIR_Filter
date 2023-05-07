@@ -185,8 +185,8 @@ module firc (input  wire               Clk,
   reg fifo_rd_en;
   wire fifo_empty;
 
-  wire [53:0] mult_out_i_0, mult_out_i_1, mult_out_i_2, mult_out_i_3, mult_out_i_4;
-  wire [53:0] mult_out_q_0, mult_out_q_1, mult_out_q_2, mult_out_q_3, mult_out_q_4; 
+  wire [50:0] mult_out_i_0, mult_out_i_1, mult_out_i_2, mult_out_i_3, mult_out_i_4;
+  wire [50:0] mult_out_q_0, mult_out_q_1, mult_out_q_2, mult_out_q_3, mult_out_q_4; 
 
   reg signed [31:0] acc_rnd_out_i, acc_rnd_out_q;
 
@@ -642,15 +642,15 @@ module ComplexMult(input                    clk,
                    input  reg signed [23:0] data_q,
                    input  reg signed [26:0] coef_i,
                    input  reg signed [26:0] coef_q,
-                   output reg signed [53:0] mult_out_i,
-                   output reg signed [53:0] mult_out_q);
+                   output reg signed [50:0] mult_out_i,
+                   output reg signed [50:0] mult_out_q);
 
-  reg signed [53:0] prod_ac, prod_bd, prod_bc, prod_ad;
+  reg signed [50:0] prod_ac, prod_bd, prod_bc, prod_ad;
 
-  DW02_mult_2_stage #(27,27) AC(.A({data_i[23], data_i[23], data_i[23], data_i}), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
-  DW02_mult_2_stage #(27,27) BD(.A({data_q[23], data_q[23], data_q[23], data_q}), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
-  DW02_mult_2_stage #(27,27) BC(.A({data_q[23], data_q[23], data_q[23], data_q}), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
-  DW02_mult_2_stage #(27,27) AD(.A({data_i[23], data_i[23], data_i[23], data_i}), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
+  DW02_mult_2_stage #(24,27) AC(.A(data_i), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
+  DW02_mult_2_stage #(24,27) BD(.A(data_q), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
+  DW02_mult_2_stage #(24,27) BC(.A(data_q), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
+  DW02_mult_2_stage #(24,27) AD(.A(data_i), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
 
   assign mult_out_i = prod_ac - prod_bd; 
   assign mult_out_q = prod_bc + prod_ad;
@@ -694,23 +694,24 @@ endmodule
 ///////////////////////////////////////////////////////////////////////////////
 module accumulator_round (input                    clk,
                           input                    reset,
-                          input  reg signed [53:0] mult_out_i_0,
-                          input  reg signed [53:0] mult_out_q_0,
-                          input  reg signed [53:0] mult_out_i_1,
-                          input  reg signed [53:0] mult_out_q_1,
-                          input  reg signed [53:0] mult_out_i_2,
-                          input  reg signed [53:0] mult_out_q_2,
-                          input  reg signed [53:0] mult_out_i_3,
-                          input  reg signed [53:0] mult_out_q_3,
-                          input  reg signed [53:0] mult_out_i_4,
-                          input  reg signed [53:0] mult_out_q_4,
+                          input  reg signed [50:0] mult_out_i_0,
+                          input  reg signed [50:0] mult_out_q_0,
+                          input  reg signed [50:0] mult_out_i_1,
+                          input  reg signed [50:0] mult_out_q_1,
+                          input  reg signed [50:0] mult_out_i_2,
+                          input  reg signed [50:0] mult_out_q_2,
+                          input  reg signed [50:0] mult_out_i_3,
+                          input  reg signed [50:0] mult_out_q_3,
+                          input  reg signed [50:0] mult_out_i_4,
+                          input  reg signed [50:0] mult_out_q_4,
                           output reg signed [31:0] out_i,
                           output reg signed [31:0] out_q);
 
-  reg signed [53:0] sum_i, sum_q;
+  reg signed [50:0] ms_i, ms_q;
+  reg signed [50:0] sum_i, sum_q;
 
-  assign out_i = sum_i >> 24;
-  assign out_q = sum_q >> 24;
+  assign out_i = sum_i >> 23;
+  assign out_q = sum_q >> 23;
 
   always @ (posedge clk or posedge reset)
   begin
@@ -735,7 +736,7 @@ endmodule
 ///////////////////////////////////////////////////////////////////////////////
 module data_pipe(CLK, RST, A, A_FLOPPED);
   parameter	WIDTH = 1;
-  parameter DEPTH = 5;
+  parameter DEPTH = 3;
 
   input	 [WIDTH-1:0]	A;
   input			          RST,CLK;
