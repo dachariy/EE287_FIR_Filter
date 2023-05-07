@@ -20,7 +20,30 @@ module firc (input  wire               Clk,
              output wire        [31:0] FQ);
 
 
-  //Debug wires
+  // Wires and regs
+  // Sample regs
+  
+  wire [23:0] shift_reg_i_0;
+  wire [23:0] shift_reg_q_0;
+  reg signed [23:0] shift_reg_i[28:0];
+  reg signed [23:0] shift_reg_q[28:0];
+  
+  wire [26:0] dbg_coeff_i_0, dbg_coeff_q_0;
+  wire [26:0] dbg_coeff_i_1, dbg_coeff_q_1;
+  wire [26:0] dbg_coeff_i_2, dbg_coeff_q_2;
+  wire [26:0] dbg_coeff_i_3, dbg_coeff_q_3;
+  wire [26:0] dbg_coeff_i_4, dbg_coeff_q_4;
+  wire [26:0] dbg_coeff_i_5, dbg_coeff_q_5;
+  wire [26:0] dbg_coeff_i_6, dbg_coeff_q_6;
+  wire [26:0] dbg_coeff_i_7, dbg_coeff_q_7;
+  wire [26:0] dbg_coeff_i_8, dbg_coeff_q_8;
+  wire [26:0] dbg_coeff_i_9, dbg_coeff_q_9;
+  wire [26:0] dbg_coeff_i_10, dbg_coeff_q_10;
+  wire [26:0] dbg_coeff_i_11, dbg_coeff_q_11;
+  wire [26:0] dbg_coeff_i_12, dbg_coeff_q_12;
+  wire [26:0] dbg_coeff_i_13, dbg_coeff_q_13;
+  wire [26:0] dbg_coeff_i_14, dbg_coeff_q_14;
+  
   wire [23:0] dbg_shift_reg_i_0, dbg_shift_reg_q_0;
   wire [23:0] dbg_shift_reg_i_1, dbg_shift_reg_q_1;
   wire [23:0] dbg_shift_reg_i_2, dbg_shift_reg_q_2;
@@ -50,29 +73,8 @@ module firc (input  wire               Clk,
   wire [23:0] dbg_shift_reg_i_26, dbg_shift_reg_q_26;
   wire [23:0] dbg_shift_reg_i_27, dbg_shift_reg_q_27;
   wire [23:0] dbg_shift_reg_i_28, dbg_shift_reg_q_28;
-
-  wire [26:0] dbg_coeff_i_0, dbg_coeff_q_0;
-  wire [26:0] dbg_coeff_i_1, dbg_coeff_q_1;
-  wire [26:0] dbg_coeff_i_2, dbg_coeff_q_2;
-  wire [26:0] dbg_coeff_i_3, dbg_coeff_q_3;
-  wire [26:0] dbg_coeff_i_4, dbg_coeff_q_4;
-  wire [26:0] dbg_coeff_i_5, dbg_coeff_q_5;
-  wire [26:0] dbg_coeff_i_6, dbg_coeff_q_6;
-  wire [26:0] dbg_coeff_i_7, dbg_coeff_q_7;
-  wire [26:0] dbg_coeff_i_8, dbg_coeff_q_8;
-  wire [26:0] dbg_coeff_i_9, dbg_coeff_q_9;
-  wire [26:0] dbg_coeff_i_10, dbg_coeff_q_10;
-  wire [26:0] dbg_coeff_i_11, dbg_coeff_q_11;
-  wire [26:0] dbg_coeff_i_12, dbg_coeff_q_12;
-  wire [26:0] dbg_coeff_i_13, dbg_coeff_q_13;
-  wire [26:0] dbg_coeff_i_14, dbg_coeff_q_14;
-
-  // Wires and regs
-  // Sample regs
-  reg signed [23:0] shift_reg_i[28:0];
-  reg signed [23:0] shift_reg_q[28:0];
-
-  assign dbg_shift_reg_i_0 = shift_reg_i[0];
+  
+ assign dbg_shift_reg_i_0 = shift_reg_i[0];
  assign dbg_shift_reg_q_0 = shift_reg_q[0];
  assign dbg_shift_reg_i_1 = shift_reg_i[1];
  assign dbg_shift_reg_q_1 = shift_reg_q[1];
@@ -130,6 +132,9 @@ module firc (input  wire               Clk,
  assign dbg_shift_reg_q_27 = shift_reg_q[27];
  assign dbg_shift_reg_i_28 = shift_reg_i[28];
  assign dbg_shift_reg_q_28 = shift_reg_q[28];
+  
+  //reg signed [23:0] shift_reg_i[28:0];
+  //reg signed [23:0] shift_reg_q[28:0];
 
   reg signed [23:0] data_i_0_loc_a, data_i_1_loc_a, data_i_2_loc_a,  data_i_3_loc_a, data_i_4_loc_a;
   reg signed [23:0] data_q_0_loc_a, data_q_1_loc_a, data_q_2_loc_a,  data_q_3_loc_a, data_q_4_loc_a;
@@ -140,7 +145,7 @@ module firc (input  wire               Clk,
   reg signed [26:0] CoefIMem [15:0];
   reg signed [26:0] CoefQMem [15:0];
 
-  assign dbg_coeff_i_0 = CoefIMem[0]; 
+ assign dbg_coeff_i_0 = CoefIMem[0]; 
  assign dbg_coeff_q_0 = CoefQMem[0];
  assign dbg_coeff_i_1 = CoefIMem[1]; 
  assign dbg_coeff_q_1 = CoefQMem[1];
@@ -170,14 +175,14 @@ module firc (input  wire               Clk,
  assign dbg_coeff_q_13 = CoefQMem[13];
  assign dbg_coeff_i_14 = CoefIMem[14]; 
  assign dbg_coeff_q_14 = CoefQMem[14];
-
+  
   reg signed [26:0] i_coef_reg1, i_coef_reg2, i_coef_reg3, i_coef_reg4, i_coef_reg5;
   reg signed [26:0] q_coef_reg1, q_coef_reg2, q_coef_reg3, q_coef_reg4, q_coef_reg5;
   reg signed [26:0] i_coef_reg1_d, i_coef_reg2_d, i_coef_reg3_d, i_coef_reg4_d, i_coef_reg5_d;
   reg signed [26:0] q_coef_reg1_d, q_coef_reg2_d, q_coef_reg3_d, q_coef_reg4_d, q_coef_reg5_d;
 
-  wire [23:0] shift_reg_i_0;
-  wire [23:0] shift_reg_q_0;
+  //wire [23:0] shift_reg_i_0;
+  //wire [23:0] shift_reg_q_0;
 
   reg signed [23:0] a2m_i_0, a2m_i_1, a2m_i_2, a2m_i_3, a2m_i_4;
   reg signed [23:0] a2m_q_0, a2m_q_1, a2m_q_2, a2m_q_3, a2m_q_4;
@@ -185,12 +190,16 @@ module firc (input  wire               Clk,
   reg fifo_rd_en;
   wire fifo_empty;
 
-  wire [53:0] mult_out_i_0, mult_out_i_1, mult_out_i_2, mult_out_i_3, mult_out_i_4;
-  wire [53:0] mult_out_q_0, mult_out_q_1, mult_out_q_2, mult_out_q_3, mult_out_q_4; 
+  wire [50:0] mult_out_i_0, mult_out_i_1, mult_out_i_2, mult_out_i_3, mult_out_i_4;
+  wire [50:0] mult_out_q_0, mult_out_q_1, mult_out_q_2, mult_out_q_3, mult_out_q_4; 
 
   reg signed [31:0] acc_rnd_out_i, acc_rnd_out_q;
 
+  reg signed [31:0] FI_d, FQ_d;
+  
   reg push_out_reg, push_out_reg_flopped;
+  
+  reg reset_acc_reg, reset_acc_reg_flopped;
 
   // STATE PARAMETERS
   parameter ST_RESET = 2'b00, ST_MUL_0 = 2'b01, ST_MUL_1 = 2'b10, ST_MUL_2 = 2'b11;
@@ -200,9 +209,12 @@ module firc (input  wire               Clk,
 
   // Assign output wire
   assign PushOut = push_out_reg_flopped;
-  assign FI = acc_rnd_out_i;
-  assign FQ = acc_rnd_out_q;
+  //assign FI = acc_rnd_out_i;
+  //assign FQ = acc_rnd_out_q;
 
+  assign FI = FI_d;
+  assign FQ = FQ_d;
+  
   // Module Instances
   fifo ip_fifo(.clk(Clk), .rst(Reset), .rd(fifo_rd_en), .wr(PushIn), .write_data1(SampI), .write_data2(SampQ), .empty(fifo_empty), .full(StopIn), .read_data1(shift_reg_i_0), .read_data2(shift_reg_q_0));
 
@@ -218,9 +230,13 @@ module firc (input  wire               Clk,
   ComplexMult cm_3(.clk(Clk), .reset(Reset), .data_i(a2m_i_3), .data_q(a2m_q_3), .coef_i(i_coef_reg4), .coef_q(q_coef_reg4), .mult_out_i(mult_out_i_3), .mult_out_q(mult_out_q_3));
   ComplexMult cm_4(.clk(Clk), .reset(Reset), .data_i(a2m_i_4), .data_q(a2m_q_4), .coef_i(i_coef_reg5), .coef_q(q_coef_reg5), .mult_out_i(mult_out_i_4), .mult_out_q(mult_out_q_4));
 
-  accumulator_round acc_rnd (.clk(Clk), .reset(Reset), .mult_out_i_0(mult_out_i_0), .mult_out_q_0(mult_out_q_0), .mult_out_i_1(mult_out_i_1), .mult_out_q_1(mult_out_q_1), .mult_out_i_2(mult_out_i_2), .mult_out_q_2(mult_out_q_2), .mult_out_i_3(mult_out_i_3), .mult_out_q_3(mult_out_q_3), .mult_out_i_4(mult_out_i_4), .mult_out_q_4(mult_out_q_4), .out_i(acc_rnd_out_i), .out_q(acc_rnd_out_q));
+  post_mult_adder post_add (.clk(Clk), .reset(Reset), .mult_out_i_0(mult_out_i_0), .mult_out_q_0(mult_out_q_0), .mult_out_i_1(mult_out_i_1), .mult_out_q_1(mult_out_q_1), .mult_out_i_2(mult_out_i_2), .mult_out_q_2(mult_out_q_2), .mult_out_i_3(mult_out_i_3), .mult_out_q_3(mult_out_q_3), .mult_out_i_4(mult_out_i_4), .mult_out_q_4(mult_out_q_4), .out_i(acc_rnd_out_i), .out_q(acc_rnd_out_q));
 
-  data_pipe push_out_8_stage(.CLK(Clk), .RST(Reset), .A(push_out_reg), .A_FLOPPED(push_out_reg_flopped));
+  accumulator acc (.clk(Clk), .reset(Reset), .reset_acc(reset_acc_reg_flopped), .a_i(acc_rnd_out_i), .a_q(acc_rnd_out_q), .o_i(FI_d), .o_q(FQ_d));
+  
+  data_pipe #(8) push_out_7_stage(.CLK(Clk), .RST(Reset), .A(reset_acc_reg), .A_FLOPPED(reset_acc_reg_flopped));
+  
+  data_pipe #(6) push_out_5_stage(.CLK(Clk), .RST(Reset), .A(push_out_reg), .A_FLOPPED(push_out_reg_flopped));
 
   //Coefficient Handling
   always @ (posedge(Clk) or posedge(Reset))begin
@@ -251,7 +267,7 @@ module firc (input  wire               Clk,
       end
     end
     // Storing Samples
-    else if(curr_state == ST_MUL_0 && fifo_empty == 0)
+    else if(curr_state == ST_MUL_2 && fifo_empty == 0)
     begin
       shift_reg_i <= {shift_reg_i[27:0], shift_reg_i_0};
       shift_reg_q <= {shift_reg_q[27:0], shift_reg_q_0};
@@ -339,6 +355,8 @@ module firc (input  wire               Clk,
         fifo_rd_en = 0;
 
         push_out_reg = 0;
+        
+        reset_acc_reg = 0;
 
         next_state = ST_MUL_0;
       end
@@ -385,6 +403,8 @@ module firc (input  wire               Clk,
           fifo_rd_en = 0;
 
           push_out_reg = 0;
+          
+          reset_acc_reg = 0;
 
           next_state = ST_MUL_0;
         end
@@ -414,8 +434,10 @@ module firc (input  wire               Clk,
           data_q_3_loc_b = shift_reg_q[25];
           data_q_4_loc_b = shift_reg_q[24];
 
-          fifo_rd_en = 1;
+          fifo_rd_en = 0;
 
+          reset_acc_reg = 1;
+          
           push_out_reg = 0;
           
           next_state = ST_MUL_1;
@@ -462,6 +484,8 @@ module firc (input  wire               Clk,
         fifo_rd_en = 0;
 
         push_out_reg = 0;
+        
+        reset_acc_reg = 0;
 
         next_state = ST_MUL_2;
       end
@@ -503,9 +527,11 @@ module firc (input  wire               Clk,
         data_q_3_loc_b = shift_reg_q[15];
         data_q_4_loc_b =24'b0;
 
-        fifo_rd_en = 0;
+        fifo_rd_en = 1;
 
         push_out_reg = 1;
+        
+        reset_acc_reg = 0;
 
         next_state = ST_MUL_0;
       end
@@ -642,15 +668,15 @@ module ComplexMult(input                    clk,
                    input  reg signed [23:0] data_q,
                    input  reg signed [26:0] coef_i,
                    input  reg signed [26:0] coef_q,
-                   output reg signed [53:0] mult_out_i,
-                   output reg signed [53:0] mult_out_q);
+                   output reg signed [50:0] mult_out_i,
+                   output reg signed [50:0] mult_out_q);
 
-  reg signed [53:0] prod_ac, prod_bd, prod_bc, prod_ad;
+  reg signed [50:0] prod_ac, prod_bd, prod_bc, prod_ad;
 
-  DW02_mult_2_stage #(27,27) AC(.A({data_i[23], data_i[23], data_i[23], data_i}), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
-  DW02_mult_2_stage #(27,27) BD(.A({data_q[23], data_q[23], data_q[23], data_q}), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
-  DW02_mult_2_stage #(27,27) BC(.A({data_q[23], data_q[23], data_q[23], data_q}), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
-  DW02_mult_2_stage #(27,27) AD(.A({data_i[23], data_i[23], data_i[23], data_i}), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
+  DW02_mult_2_stage #(24,27) AC(.A(data_i), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
+  DW02_mult_2_stage #(24,27) BD(.A(data_q), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
+  DW02_mult_2_stage #(24,27) BC(.A(data_q), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
+  DW02_mult_2_stage #(24,27) AD(.A(data_i), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
 
   assign mult_out_i = prod_ac - prod_bd; 
   assign mult_out_q = prod_bc + prod_ad;
@@ -688,29 +714,30 @@ module pre_mult_adder(input                    clk,
 endmodule
 
 ///////////////////////////////////////////////////////////////////////////////
-// Module : accumulator_round
+// Module : post_mult_adder
 //
 // Adds output of the 5 multipliers and rounds to 8.24 format
 ///////////////////////////////////////////////////////////////////////////////
-module accumulator_round (input                    clk,
+module post_mult_adder             (input                    clk,
                           input                    reset,
-                          input  reg signed [53:0] mult_out_i_0,
-                          input  reg signed [53:0] mult_out_q_0,
-                          input  reg signed [53:0] mult_out_i_1,
-                          input  reg signed [53:0] mult_out_q_1,
-                          input  reg signed [53:0] mult_out_i_2,
-                          input  reg signed [53:0] mult_out_q_2,
-                          input  reg signed [53:0] mult_out_i_3,
-                          input  reg signed [53:0] mult_out_q_3,
-                          input  reg signed [53:0] mult_out_i_4,
-                          input  reg signed [53:0] mult_out_q_4,
+                          input  reg signed [50:0] mult_out_i_0,
+                          input  reg signed [50:0] mult_out_q_0,
+                          input  reg signed [50:0] mult_out_i_1,
+                          input  reg signed [50:0] mult_out_q_1,
+                          input  reg signed [50:0] mult_out_i_2,
+                          input  reg signed [50:0] mult_out_q_2,
+                          input  reg signed [50:0] mult_out_i_3,
+                          input  reg signed [50:0] mult_out_q_3,
+                          input  reg signed [50:0] mult_out_i_4,
+                          input  reg signed [50:0] mult_out_q_4,
                           output reg signed [31:0] out_i,
                           output reg signed [31:0] out_q);
 
-  reg signed [53:0] sum_i, sum_q;
+  reg signed [50:0] ms_i, ms_q;
+  reg signed [50:0] sum_i, sum_q;
 
-  assign out_i = sum_i >> 24;
-  assign out_q = sum_q >> 24;
+  assign out_i = sum_i >> 23;
+  assign out_q = sum_q >> 23;
 
   always @ (posedge clk or posedge reset)
   begin
@@ -727,15 +754,47 @@ module accumulator_round (input                    clk,
   end
 
 endmodule
-
 ///////////////////////////////////////////////////////////////////////////////
-// Module : accumulator_round
+// Module : accumulator
+//
+// Adds output of the 3 stages of multipliers
+///////////////////////////////////////////////////////////////////////////////
+
+module accumulator( input                    clk,
+            input                    reset,
+            input                    reset_acc,
+            input  reg signed [31:0] a_i,
+            input  reg signed [31:0] a_q,
+            output reg signed [31:0] o_i,
+            output reg signed [31:0] o_q);
+
+  always @ (posedge clk)
+  begin
+    if(reset)
+    begin
+      o_i <= 0;
+      o_q <= 0;
+    end
+    else if(reset_acc)
+    begin
+	 
+      o_i <= a_i ;
+      o_q <= a_q ;
+    end
+    else begin
+      o_i <= a_i + o_i;
+      o_q <= a_q + o_q;
+    end
+  end
+endmodule
+///////////////////////////////////////////////////////////////////////////////
+// Module : data_pipe
 //
 // Adds output of the 5 multipliers and rounds to 8.24 format
 ///////////////////////////////////////////////////////////////////////////////
-module data_pipe(CLK, RST, A, A_FLOPPED);
+module data_pipe #(parameter DEPTH = 3)(CLK, RST, A, A_FLOPPED);
   parameter	WIDTH = 1;
-  parameter DEPTH = 5;
+  //parameter DEPTH = 3;
 
   input	 [WIDTH-1:0]	A;
   input			          RST,CLK;
