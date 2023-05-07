@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Sun May  7 00:20:52 2023
+[*] Sun May  7 01:14:32 2023
 [*]
 [dumpfile] "/home/014558648@SJSUAD.SJSU.EDU/Documents/EE287/Project/EE287_FIR_Filter/fir.vcd"
-[dumpfile_mtime] "Sun May  7 00:06:52 2023"
-[dumpfile_size] 130742
+[dumpfile_mtime] "Sun May  7 01:11:07 2023"
+[dumpfile_size] 139938
 [savefile] "/home/014558648@SJSUAD.SJSU.EDU/Documents/EE287/Project/EE287_FIR_Filter/debug.gtkw"
-[timestart] 946400
+[timestart] 0
 [size] 1920 977
 [pos] -1 -1
-*-15.420608 1110000 961000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-14.668535 51000 961000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.fir1.
 [sst_width] 363
@@ -63,6 +63,7 @@ top.fir1.shift_reg_i_0[23:0]
 top.fir1.shift_reg_q_0[23:0]
 @200
 -
+-Adder
 @28
 top.fir1.pre_add_0.clk
 top.fir1.pre_add_0.reset
@@ -75,6 +76,30 @@ top.fir1.pre_add_0.o_i[23:0]
 top.fir1.pre_add_0.o_q[23:0]
 @200
 -
+@22
+top.fir1.dbg_coeff_i_0[26:0]
+top.fir1.dbg_coeff_i_1[26:0]
+top.fir1.dbg_coeff_i_2[26:0]
+top.fir1.dbg_coeff_i_3[26:0]
+top.fir1.dbg_coeff_i_4[26:0]
+top.fir1.dbg_coeff_q_0[26:0]
+top.fir1.dbg_coeff_q_1[26:0]
+top.fir1.dbg_coeff_q_2[26:0]
+top.fir1.dbg_coeff_q_3[26:0]
+top.fir1.dbg_coeff_q_4[26:0]
+top.fir1.dbg_shift_reg_i_0[23:0]
+top.fir1.dbg_shift_reg_i_1[23:0]
+top.fir1.dbg_shift_reg_i_2[23:0]
+top.fir1.dbg_shift_reg_i_3[23:0]
+top.fir1.dbg_shift_reg_i_4[23:0]
+@23
+top.fir1.dbg_shift_reg_q_0[23:0]
+top.fir1.dbg_shift_reg_q_1[23:0]
+top.fir1.dbg_shift_reg_q_2[23:0]
+top.fir1.dbg_shift_reg_q_3[23:0]
+top.fir1.dbg_shift_reg_q_4[23:0]
+@200
+-Mult_0
 @28
 top.fir1.cm_0.clk
 top.fir1.cm_0.reset
