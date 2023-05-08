@@ -144,6 +144,9 @@ module firc (input  wire               Clk,
   // Coefficient regs
   reg signed [26:0] CoefIMem [15:0];
   reg signed [26:0] CoefQMem [15:0];
+  
+  reg signed [26:0] CoefI_temp [15:0];
+  reg signed [26:0] CoefQ_temp [15:0];
 
  assign dbg_coeff_i_0 = CoefIMem[0]; 
  assign dbg_coeff_q_0 = CoefQMem[0];
@@ -234,7 +237,7 @@ module firc (input  wire               Clk,
 
   accumulator acc (.clk(Clk), .reset(Reset), .reset_acc(reset_acc_reg_flopped), .a_i(acc_rnd_out_i), .a_q(acc_rnd_out_q), .o_i(FI_d), .o_q(FQ_d));
   
-  data_pipe #(8) push_out_7_stage(.CLK(Clk), .RST(Reset), .A(reset_acc_reg), .A_FLOPPED(reset_acc_reg_flopped));
+  data_pipe #(5) push_out_7_stage(.CLK(Clk), .RST(Reset), .A(reset_acc_reg), .A_FLOPPED(reset_acc_reg_flopped));
   
   data_pipe #(6) push_out_5_stage(.CLK(Clk), .RST(Reset), .A(push_out_reg), .A_FLOPPED(push_out_reg_flopped));
 
@@ -243,17 +246,25 @@ module firc (input  wire               Clk,
     if(Reset)begin
       //Resets Coefficients
       for(int i=0; i<16; i += 1)begin
+        CoefI_temp[i] <= 27'b0;
+        CoefQ_temp[i] <= 27'b0;
         CoefIMem[i] <= 27'b0;
         CoefQMem[i] <= 27'b0;
      end
     end
     //Stores Coefficients
     else if(PushCoef == 1)begin
-      CoefIMem[CoefAddr] <= CoefI;
-      CoefQMem[CoefAddr] <= CoefQ;
+      CoefI_temp[CoefAddr] <= CoefI;
+      CoefQ_temp[CoefAddr] <= CoefQ;
     end
   end
 
+  always @ (posedge(PushIn))begin
+  begin
+    CoefIMem <= CoefI_temp;
+    CoefQMem <= CoefQ_temp;
+  end
+  end
   // Sample Handling
   always@(posedge(Clk) or posedge(Reset))
   begin
@@ -736,8 +747,8 @@ module post_mult_adder             (input                    clk,
   reg signed [50:0] ms_i, ms_q;
   reg signed [50:0] sum_i, sum_q;
 
-  assign out_i = sum_i >> 23;
-  assign out_q = sum_q >> 23;
+  assign out_i = sum_i >>> 23;
+  assign out_q = sum_q >>> 23;
 
   always @ (posedge clk or posedge reset)
   begin
@@ -768,7 +779,8 @@ module accumulator( input                    clk,
             output reg signed [31:0] o_i,
             output reg signed [31:0] o_q);
 
-  always @ (posedge clk)
+  always @ (posedge clk)
+
   begin
     if(reset)
     begin
