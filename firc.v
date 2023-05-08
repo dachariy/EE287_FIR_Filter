@@ -196,7 +196,7 @@ module firc (input  wire               Clk,
   wire [50:0] mult_out_i_0, mult_out_i_1, mult_out_i_2, mult_out_i_3, mult_out_i_4;
   wire [50:0] mult_out_q_0, mult_out_q_1, mult_out_q_2, mult_out_q_3, mult_out_q_4; 
 
-  reg signed [31:0] acc_rnd_out_i, acc_rnd_out_q;
+  reg signed [37:0] acc_rnd_out_i, acc_rnd_out_q;
 
   reg signed [31:0] FI_d, FQ_d;
   
@@ -741,14 +741,13 @@ module post_mult_adder             (input                    clk,
                           input  reg signed [50:0] mult_out_q_3,
                           input  reg signed [50:0] mult_out_i_4,
                           input  reg signed [50:0] mult_out_q_4,
-                          output reg signed [31:0] out_i,
-                          output reg signed [31:0] out_q);
+                          output reg signed [37:0] out_i,
+                          output reg signed [37:0] out_q);
 
-  reg signed [50:0] ms_i, ms_q;
-  reg signed [50:0] sum_i, sum_q;
+  reg signed [37:0] sum_i, sum_q;
 
-  assign out_i = sum_i >>> 23;
-  assign out_q = sum_q >>> 23;
+  assign out_i = sum_i;
+  assign out_q = sum_q;
 
   always @ (posedge clk or posedge reset)
   begin
@@ -759,8 +758,18 @@ module post_mult_adder             (input                    clk,
     end
     else
     begin
-      sum_i <= mult_out_i_0 + mult_out_i_1 + mult_out_i_2 + mult_out_i_3 + mult_out_i_4;
-      sum_q <= mult_out_q_0 + mult_out_q_1 + mult_out_q_2 + mult_out_q_3 + mult_out_q_4;
+      sum_i <= {{5{mult_out_i_0[50]}},mult_out_i_0[50:18]} + 
+               {{5{mult_out_i_1[50]}},mult_out_i_1[50:18]} + 
+               {{5{mult_out_i_2[50]}},mult_out_i_2[50:18]} + 
+               {{5{mult_out_i_3[50]}},mult_out_i_3[50:18]} +
+               {{5{mult_out_i_4[50]}},mult_out_i_4[50:18]};
+
+      sum_q <= {{5{mult_out_q_0[50]}},mult_out_q_0[50:18]} + 
+               {{5{mult_out_q_1[50]}},mult_out_q_1[50:18]} + 
+               {{5{mult_out_q_2[50]}},mult_out_q_2[50:18]} + 
+               {{5{mult_out_q_3[50]}},mult_out_q_3[50:18]} +
+               {{5{mult_out_q_4[50]}},mult_out_q_4[50:18]};
+
     end
   end
 
@@ -774,28 +783,35 @@ endmodule
 module accumulator( input                    clk,
             input                    reset,
             input                    reset_acc,
-            input  reg signed [31:0] a_i,
-            input  reg signed [31:0] a_q,
-            output reg signed [31:0] o_i,
-            output reg signed [31:0] o_q);
+            input  reg signed [37:0] a_i,
+            input  reg signed [37:0] a_q,
+            output [31:0] o_i,
+            output [31:0] o_q);
+
+  reg [37:0] acc_i, acc_q;
+  wire [37:0] neg_rnd_i, neg_rnd_q;
+
+  assign neg_rnd_i = acc_i + 4'b1000;
+  assign neg_rnd_q = acc_q + 4'b1000;
+  
+  assign o_i = (acc_i[37] == 0) ? acc_i[36:5] : neg_rnd_i[36:5];
+  assign o_q = (acc_q[37] == 0) ? acc_q[36:5] : neg_rnd_q[36:5];
 
   always @ (posedge clk)
-
   begin
     if(reset)
     begin
-      o_i <= 0;
-      o_q <= 0;
+      acc_i <= 0;
+      acc_q <= 0;
     end
     else if(reset_acc)
     begin
-	 
-      o_i <= a_i ;
-      o_q <= a_q ;
+      acc_i <= a_i ;
+      acc_q <= a_q ;
     end
     else begin
-      o_i <= a_i + o_i;
-      o_q <= a_q + o_q;
+      acc_i <= a_i + acc_i;
+      acc_q <= a_q + acc_q;
     end
   end
 endmodule
