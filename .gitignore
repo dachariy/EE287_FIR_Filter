@@ -1,6 +1,6 @@
 csrc/
 fir.vcd
-sim.log
+*.log
 simv
 simv.daidir/
 ucli.key

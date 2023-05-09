@@ -133,9 +133,6 @@ module firc (input  wire               Clk,
  assign dbg_shift_reg_i_28 = shift_reg_i[28];
  assign dbg_shift_reg_q_28 = shift_reg_q[28];
   
-  //reg signed [23:0] shift_reg_i[28:0];
-  //reg signed [23:0] shift_reg_q[28:0];
-
   reg signed [23:0] data_i_0_loc_a, data_i_1_loc_a, data_i_2_loc_a,  data_i_3_loc_a, data_i_4_loc_a;
   reg signed [23:0] data_q_0_loc_a, data_q_1_loc_a, data_q_2_loc_a,  data_q_3_loc_a, data_q_4_loc_a;
   reg signed [23:0] data_i_0_loc_b, data_i_1_loc_b, data_i_2_loc_b,  data_i_3_loc_b, data_i_4_loc_b;
@@ -148,36 +145,36 @@ module firc (input  wire               Clk,
   reg signed [26:0] CoefI_temp [15:0];
   reg signed [26:0] CoefQ_temp [15:0];
 
- assign dbg_coeff_i_0 = CoefIMem[0]; 
- assign dbg_coeff_q_0 = CoefQMem[0];
- assign dbg_coeff_i_1 = CoefIMem[1]; 
- assign dbg_coeff_q_1 = CoefQMem[1];
- assign dbg_coeff_i_2 = CoefIMem[2]; 
- assign dbg_coeff_q_2 = CoefQMem[2];
- assign dbg_coeff_i_3 = CoefIMem[3]; 
- assign dbg_coeff_q_3 = CoefQMem[3];
- assign dbg_coeff_i_4 = CoefIMem[4]; 
- assign dbg_coeff_q_4 = CoefQMem[4];
- assign dbg_coeff_i_5 = CoefIMem[5]; 
- assign dbg_coeff_q_5 = CoefQMem[5];
- assign dbg_coeff_i_6 = CoefIMem[6]; 
- assign dbg_coeff_q_6 = CoefQMem[6];
- assign dbg_coeff_i_7 = CoefIMem[7]; 
- assign dbg_coeff_q_7 = CoefQMem[7];
- assign dbg_coeff_i_8 = CoefIMem[8]; 
- assign dbg_coeff_q_8 = CoefQMem[8];
- assign dbg_coeff_i_9 = CoefIMem[9]; 
- assign dbg_coeff_q_9 = CoefQMem[9];
- assign dbg_coeff_i_10 = CoefIMem[10]; 
- assign dbg_coeff_q_10 = CoefQMem[10];
- assign dbg_coeff_i_11 = CoefIMem[11]; 
- assign dbg_coeff_q_11 = CoefQMem[11];
- assign dbg_coeff_i_12 = CoefIMem[12]; 
- assign dbg_coeff_q_12 = CoefQMem[12];
- assign dbg_coeff_i_13 = CoefIMem[13]; 
- assign dbg_coeff_q_13 = CoefQMem[13];
- assign dbg_coeff_i_14 = CoefIMem[14]; 
- assign dbg_coeff_q_14 = CoefQMem[14];
+  assign dbg_coeff_i_0 = CoefIMem[0]; 
+  assign dbg_coeff_q_0 = CoefQMem[0];
+  assign dbg_coeff_i_1 = CoefIMem[1]; 
+  assign dbg_coeff_q_1 = CoefQMem[1];
+  assign dbg_coeff_i_2 = CoefIMem[2]; 
+  assign dbg_coeff_q_2 = CoefQMem[2];
+  assign dbg_coeff_i_3 = CoefIMem[3]; 
+  assign dbg_coeff_q_3 = CoefQMem[3];
+  assign dbg_coeff_i_4 = CoefIMem[4]; 
+  assign dbg_coeff_q_4 = CoefQMem[4];
+  assign dbg_coeff_i_5 = CoefIMem[5]; 
+  assign dbg_coeff_q_5 = CoefQMem[5];
+  assign dbg_coeff_i_6 = CoefIMem[6]; 
+  assign dbg_coeff_q_6 = CoefQMem[6];
+  assign dbg_coeff_i_7 = CoefIMem[7]; 
+  assign dbg_coeff_q_7 = CoefQMem[7];
+  assign dbg_coeff_i_8 = CoefIMem[8]; 
+  assign dbg_coeff_q_8 = CoefQMem[8];
+  assign dbg_coeff_i_9 = CoefIMem[9]; 
+  assign dbg_coeff_q_9 = CoefQMem[9];
+  assign dbg_coeff_i_10 = CoefIMem[10]; 
+  assign dbg_coeff_q_10 = CoefQMem[10];
+  assign dbg_coeff_i_11 = CoefIMem[11]; 
+  assign dbg_coeff_q_11 = CoefQMem[11];
+  assign dbg_coeff_i_12 = CoefIMem[12]; 
+  assign dbg_coeff_q_12 = CoefQMem[12];
+  assign dbg_coeff_i_13 = CoefIMem[13]; 
+  assign dbg_coeff_q_13 = CoefQMem[13];
+  assign dbg_coeff_i_14 = CoefIMem[14]; 
+  assign dbg_coeff_q_14 = CoefQMem[14];
   
   reg signed [26:0] i_coef_reg1, i_coef_reg2, i_coef_reg3, i_coef_reg4, i_coef_reg5;
   reg signed [26:0] q_coef_reg1, q_coef_reg2, q_coef_reg3, q_coef_reg4, q_coef_reg5;
@@ -187,14 +184,14 @@ module firc (input  wire               Clk,
   //wire [23:0] shift_reg_i_0;
   //wire [23:0] shift_reg_q_0;
 
-  reg signed [23:0] a2m_i_0, a2m_i_1, a2m_i_2, a2m_i_3, a2m_i_4;
-  reg signed [23:0] a2m_q_0, a2m_q_1, a2m_q_2, a2m_q_3, a2m_q_4;
+  reg signed [24:0] a2m_i_0, a2m_i_1, a2m_i_2, a2m_i_3, a2m_i_4;
+  reg signed [24:0] a2m_q_0, a2m_q_1, a2m_q_2, a2m_q_3, a2m_q_4;
 
   reg fifo_rd_en;
   wire fifo_empty;
 
-  wire [50:0] mult_out_i_0, mult_out_i_1, mult_out_i_2, mult_out_i_3, mult_out_i_4;
-  wire [50:0] mult_out_q_0, mult_out_q_1, mult_out_q_2, mult_out_q_3, mult_out_q_4; 
+  wire [51:0] mult_out_i_0, mult_out_i_1, mult_out_i_2, mult_out_i_3, mult_out_i_4;
+  wire [51:0] mult_out_q_0, mult_out_q_1, mult_out_q_2, mult_out_q_3, mult_out_q_4; 
 
   reg signed [37:0] acc_rnd_out_i, acc_rnd_out_q;
 
@@ -675,19 +672,19 @@ endmodule
 
 module ComplexMult(input                    clk,
                    input                    reset,
-                   input  reg signed [23:0] data_i,
-                   input  reg signed [23:0] data_q,
+                   input  reg signed [24:0] data_i,
+                   input  reg signed [24:0] data_q,
                    input  reg signed [26:0] coef_i,
                    input  reg signed [26:0] coef_q,
-                   output reg signed [50:0] mult_out_i,
-                   output reg signed [50:0] mult_out_q);
+                   output reg signed [51:0] mult_out_i,
+                   output reg signed [51:0] mult_out_q);
 
-  reg signed [50:0] prod_ac, prod_bd, prod_bc, prod_ad;
+  reg signed [51:0] prod_ac, prod_bd, prod_bc, prod_ad;
 
-  DW02_mult_2_stage #(24,27) AC(.A(data_i), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
-  DW02_mult_2_stage #(24,27) BD(.A(data_q), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
-  DW02_mult_2_stage #(24,27) BC(.A(data_q), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
-  DW02_mult_2_stage #(24,27) AD(.A(data_i), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
+  DW02_mult_2_stage #(25,27) AC(.A(data_i), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
+  DW02_mult_2_stage #(25,27) BD(.A(data_q), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
+  DW02_mult_2_stage #(25,27) BC(.A(data_q), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
+  DW02_mult_2_stage #(25,27) AD(.A(data_i), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
 
   assign mult_out_i = prod_ac - prod_bd; 
   assign mult_out_q = prod_bc + prod_ad;
@@ -705,8 +702,8 @@ module pre_mult_adder(input                    clk,
                       input  reg signed [23:0] a_q,
                       input  reg signed [23:0] b_i,
                       input  reg signed [23:0] b_q,
-                      output reg signed [23:0] o_i,
-                      output reg signed [23:0] o_q);
+                      output reg signed [24:0] o_i,
+                      output reg signed [24:0] o_q);
 
    always @ (posedge clk)
    begin
@@ -731,16 +728,16 @@ endmodule
 ///////////////////////////////////////////////////////////////////////////////
 module post_mult_adder             (input                    clk,
                           input                    reset,
-                          input  reg signed [50:0] mult_out_i_0,
-                          input  reg signed [50:0] mult_out_q_0,
-                          input  reg signed [50:0] mult_out_i_1,
-                          input  reg signed [50:0] mult_out_q_1,
-                          input  reg signed [50:0] mult_out_i_2,
-                          input  reg signed [50:0] mult_out_q_2,
-                          input  reg signed [50:0] mult_out_i_3,
-                          input  reg signed [50:0] mult_out_q_3,
-                          input  reg signed [50:0] mult_out_i_4,
-                          input  reg signed [50:0] mult_out_q_4,
+                          input  reg signed [51:0] mult_out_i_0,
+                          input  reg signed [51:0] mult_out_q_0,
+                          input  reg signed [51:0] mult_out_i_1,
+                          input  reg signed [51:0] mult_out_q_1,
+                          input  reg signed [51:0] mult_out_i_2,
+                          input  reg signed [51:0] mult_out_q_2,
+                          input  reg signed [51:0] mult_out_i_3,
+                          input  reg signed [51:0] mult_out_q_3,
+                          input  reg signed [51:0] mult_out_i_4,
+                          input  reg signed [51:0] mult_out_q_4,
                           output reg signed [37:0] out_i,
                           output reg signed [37:0] out_q);
 
