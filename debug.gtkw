@@ -1,118 +1,180 @@
 [*]
 [*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
-[*] Sun May  7 01:14:32 2023
+[*] Wed May 10 02:54:41 2023
 [*]
-[dumpfile] "/home/014558648@SJSUAD.SJSU.EDU/Documents/EE287/Project/EE287_FIR_Filter/fir.vcd"
-[dumpfile_mtime] "Sun May  7 01:11:07 2023"
-[dumpfile_size] 139938
-[savefile] "/home/014558648@SJSUAD.SJSU.EDU/Documents/EE287/Project/EE287_FIR_Filter/debug.gtkw"
-[timestart] 0
-[size] 1920 977
-[pos] -1 -1
-*-14.668535 51000 961000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[dumpfile] "/home/014558648@SJSUAD.SJSU.EDU/Documents/EE287/Project/EE287_FIR_Filter_debug/fir.vcd"
+[dumpfile_mtime] "Wed May 10 01:41:42 2023"
+[dumpfile_size] 1478295
+[savefile] "/home/014558648@SJSUAD.SJSU.EDU/Documents/EE287/Project/EE287_FIR_Filter_debug/debug.gtkw"
+[timestart] 6930430
+[size] 991 977
+[pos] -71 -1
+*-13.847153 6940000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.fir1.
-[sst_width] 363
-[signals_width] 350
+[sst_width] 229
+[signals_width] 174
 [sst_expanded] 1
-[sst_vpaned_height] 373
-@28
-top.fir1.Clk
-top.fir1.Reset
-top.fir1.PushCoef
+[sst_vpaned_height] 270
 @22
-top.fir1.CoefAddr[4:0]
-top.fir1.CoefI[26:0]
-top.fir1.CoefQ[26:0]
+top.fir1.cm_0.coef_i[26:0]
+top.fir1.cm_0.coef_q[26:0]
+top.fir1.cm_0.data_i[24:0]
+top.fir1.cm_0.data_q[24:0]
+top.fir1.cm_0.prod_ac[51:0]
+top.fir1.cm_0.prod_ad[51:0]
+top.fir1.cm_0.prod_bc[51:0]
+top.fir1.cm_0.prod_bd[51:0]
+top.fir1.cm_0.mult_out_i[51:0]
+@c00022
+top.fir1.cm_0.mult_out_q[51:0]
 @28
-top.fir1.PushIn
+(0)top.fir1.cm_0.mult_out_q[51:0]
+(1)top.fir1.cm_0.mult_out_q[51:0]
+(2)top.fir1.cm_0.mult_out_q[51:0]
+(3)top.fir1.cm_0.mult_out_q[51:0]
+(4)top.fir1.cm_0.mult_out_q[51:0]
+(5)top.fir1.cm_0.mult_out_q[51:0]
+(6)top.fir1.cm_0.mult_out_q[51:0]
+(7)top.fir1.cm_0.mult_out_q[51:0]
+(8)top.fir1.cm_0.mult_out_q[51:0]
+(9)top.fir1.cm_0.mult_out_q[51:0]
+(10)top.fir1.cm_0.mult_out_q[51:0]
+(11)top.fir1.cm_0.mult_out_q[51:0]
+(12)top.fir1.cm_0.mult_out_q[51:0]
+(13)top.fir1.cm_0.mult_out_q[51:0]
+(14)top.fir1.cm_0.mult_out_q[51:0]
+(15)top.fir1.cm_0.mult_out_q[51:0]
+(16)top.fir1.cm_0.mult_out_q[51:0]
+(17)top.fir1.cm_0.mult_out_q[51:0]
+(18)top.fir1.cm_0.mult_out_q[51:0]
+(19)top.fir1.cm_0.mult_out_q[51:0]
+(20)top.fir1.cm_0.mult_out_q[51:0]
+(21)top.fir1.cm_0.mult_out_q[51:0]
+(22)top.fir1.cm_0.mult_out_q[51:0]
+(23)top.fir1.cm_0.mult_out_q[51:0]
+(24)top.fir1.cm_0.mult_out_q[51:0]
+(25)top.fir1.cm_0.mult_out_q[51:0]
+(26)top.fir1.cm_0.mult_out_q[51:0]
+(27)top.fir1.cm_0.mult_out_q[51:0]
+(28)top.fir1.cm_0.mult_out_q[51:0]
+(29)top.fir1.cm_0.mult_out_q[51:0]
+(30)top.fir1.cm_0.mult_out_q[51:0]
+(31)top.fir1.cm_0.mult_out_q[51:0]
+(32)top.fir1.cm_0.mult_out_q[51:0]
+(33)top.fir1.cm_0.mult_out_q[51:0]
+(34)top.fir1.cm_0.mult_out_q[51:0]
+(35)top.fir1.cm_0.mult_out_q[51:0]
+(36)top.fir1.cm_0.mult_out_q[51:0]
+(37)top.fir1.cm_0.mult_out_q[51:0]
+(38)top.fir1.cm_0.mult_out_q[51:0]
+(39)top.fir1.cm_0.mult_out_q[51:0]
+(40)top.fir1.cm_0.mult_out_q[51:0]
+(41)top.fir1.cm_0.mult_out_q[51:0]
+(42)top.fir1.cm_0.mult_out_q[51:0]
+(43)top.fir1.cm_0.mult_out_q[51:0]
+(44)top.fir1.cm_0.mult_out_q[51:0]
+(45)top.fir1.cm_0.mult_out_q[51:0]
+(46)top.fir1.cm_0.mult_out_q[51:0]
+(47)top.fir1.cm_0.mult_out_q[51:0]
+(48)top.fir1.cm_0.mult_out_q[51:0]
+(49)top.fir1.cm_0.mult_out_q[51:0]
+(50)top.fir1.cm_0.mult_out_q[51:0]
+(51)top.fir1.cm_0.mult_out_q[51:0]
+@1401200
+-group_end
+@200
+-
 @22
-top.fir1.SampI[23:0]
-top.fir1.SampQ[23:0]
-@28
-top.fir1.StopIn
+top.fir1.cm_1.coef_i[26:0]
+top.fir1.cm_1.coef_q[26:0]
+top.fir1.cm_1.data_i[24:0]
+top.fir1.cm_1.data_q[24:0]
+top.fir1.cm_1.mult_out_i[51:0]
+top.fir1.cm_1.mult_out_q[51:0]
+top.fir1.cm_1.prod_ac[51:0]
+top.fir1.cm_1.prod_ad[51:0]
+top.fir1.cm_1.prod_bc[51:0]
+top.fir1.cm_1.prod_bd[51:0]
+@200
+-
+-
 @22
+top.fir1.cm_2.coef_i[26:0]
+top.fir1.cm_2.coef_q[26:0]
+top.fir1.cm_2.data_i[24:0]
+top.fir1.cm_2.data_q[24:0]
+top.fir1.cm_2.mult_out_i[51:0]
+top.fir1.cm_2.mult_out_q[51:0]
+top.fir1.cm_2.prod_ac[51:0]
+top.fir1.cm_2.prod_ad[51:0]
+top.fir1.cm_2.prod_bc[51:0]
+top.fir1.cm_2.prod_bd[51:0]
+@200
+-
+@22
+top.fir1.cm_3.coef_i[26:0]
+top.fir1.cm_3.coef_q[26:0]
+top.fir1.cm_3.data_i[24:0]
+top.fir1.cm_3.data_q[24:0]
+top.fir1.cm_3.mult_out_i[51:0]
+top.fir1.cm_3.mult_out_q[51:0]
+top.fir1.cm_3.prod_ac[51:0]
+top.fir1.cm_3.prod_ad[51:0]
+top.fir1.cm_3.prod_bc[51:0]
+top.fir1.cm_3.prod_bd[51:0]
+@200
+-
+@22
+top.fir1.cm_4.coef_i[26:0]
+top.fir1.cm_4.coef_q[26:0]
+top.fir1.cm_4.data_i[24:0]
+top.fir1.cm_4.data_q[24:0]
+top.fir1.cm_4.mult_out_i[51:0]
+top.fir1.cm_4.mult_out_q[51:0]
+top.fir1.cm_4.prod_ac[51:0]
+top.fir1.cm_4.prod_ad[51:0]
+top.fir1.cm_4.prod_bc[51:0]
+top.fir1.cm_4.prod_bd[51:0]
+@200
+-
+@22
+top.fir1.post_add.mult_out_i_0[51:0]
+top.fir1.post_add.mult_out_q_0[51:0]
+top.fir1.post_add.mult_out_i_1[51:0]
+top.fir1.post_add.mult_out_q_1[51:0]
+top.fir1.post_add.mult_out_i_2[51:0]
+top.fir1.post_add.mult_out_q_2[51:0]
+top.fir1.post_add.mult_out_i_3[51:0]
+top.fir1.post_add.mult_out_q_3[51:0]
+top.fir1.post_add.mult_out_i_4[51:0]
+top.fir1.post_add.mult_out_q_4[51:0]
+top.fir1.post_add.out_i[37:0]
+top.fir1.post_add.out_q[37:0]
+@200
+-
+@22
+top.fir1.post_add.cm_i_0[37:0]
+top.fir1.post_add.cm_q_0[37:0]
+top.fir1.post_add.cm_i_1[37:0]
+top.fir1.post_add.cm_q_1[37:0]
+@23
+top.fir1.post_add.cm_i_2[37:0]
+@22
+top.fir1.post_add.cm_q_2[37:0]
+top.fir1.post_add.cm_q_3[37:0]
+top.fir1.post_add.cm_i_3[37:0]
+top.fir1.post_add.cm_i_4[37:0]
+top.fir1.post_add.cm_q_4[37:0]
+top.fir1.acc.a_i[37:0]
+top.fir1.acc.a_q[37:0]
+top.fir1.acc.acc_i[37:0]
+top.fir1.acc.acc_q[37:0]
+top.fir1.acc.o_i[31:0]
+top.fir1.acc.o_q[31:0]
 top.fir1.FI[31:0]
 top.fir1.FQ[31:0]
 @28
 top.fir1.PushOut
-@200
--
-@28
-top.fir1.curr_state[1:0]
-@200
--
-@28
-top.fir1.ip_fifo.clk
-top.fir1.ip_fifo.rst
-top.fir1.ip_fifo.wr
-top.fir1.ip_fifo.full
-@22
-top.fir1.ip_fifo.write_data1[23:0]
-top.fir1.ip_fifo.write_data2[23:0]
-@28
-top.fir1.ip_fifo.rd
-top.fir1.ip_fifo.empty
-@22
-top.fir1.ip_fifo.read_data1[23:0]
-top.fir1.ip_fifo.read_data2[23:0]
-@200
--
-@22
-top.fir1.shift_reg_i_0[23:0]
-top.fir1.shift_reg_q_0[23:0]
-@200
--
--Adder
-@28
-top.fir1.pre_add_0.clk
-top.fir1.pre_add_0.reset
-@22
-top.fir1.pre_add_0.a_i[23:0]
-top.fir1.pre_add_0.a_q[23:0]
-top.fir1.pre_add_0.b_i[23:0]
-top.fir1.pre_add_0.b_q[23:0]
-top.fir1.pre_add_0.o_i[23:0]
-top.fir1.pre_add_0.o_q[23:0]
-@200
--
-@22
-top.fir1.dbg_coeff_i_0[26:0]
-top.fir1.dbg_coeff_i_1[26:0]
-top.fir1.dbg_coeff_i_2[26:0]
-top.fir1.dbg_coeff_i_3[26:0]
-top.fir1.dbg_coeff_i_4[26:0]
-top.fir1.dbg_coeff_q_0[26:0]
-top.fir1.dbg_coeff_q_1[26:0]
-top.fir1.dbg_coeff_q_2[26:0]
-top.fir1.dbg_coeff_q_3[26:0]
-top.fir1.dbg_coeff_q_4[26:0]
-top.fir1.dbg_shift_reg_i_0[23:0]
-top.fir1.dbg_shift_reg_i_1[23:0]
-top.fir1.dbg_shift_reg_i_2[23:0]
-top.fir1.dbg_shift_reg_i_3[23:0]
-top.fir1.dbg_shift_reg_i_4[23:0]
-@23
-top.fir1.dbg_shift_reg_q_0[23:0]
-top.fir1.dbg_shift_reg_q_1[23:0]
-top.fir1.dbg_shift_reg_q_2[23:0]
-top.fir1.dbg_shift_reg_q_3[23:0]
-top.fir1.dbg_shift_reg_q_4[23:0]
-@200
--Mult_0
-@28
-top.fir1.cm_0.clk
-top.fir1.cm_0.reset
-@22
-top.fir1.cm_0.coef_i[26:0]
-top.fir1.cm_0.coef_q[26:0]
-top.fir1.cm_0.data_i[23:0]
-top.fir1.cm_0.data_q[23:0]
-top.fir1.cm_0.prod_ac[53:0]
-top.fir1.cm_0.prod_ad[53:0]
-top.fir1.cm_0.prod_bc[53:0]
-top.fir1.cm_0.prod_bd[53:0]
-top.fir1.cm_0.mult_out_i[53:0]
-top.fir1.cm_0.mult_out_q[53:0]
 [pattern_trace] 1
 [pattern_trace] 0

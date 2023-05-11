@@ -742,9 +742,24 @@ module post_mult_adder             (input                    clk,
                           output reg signed [37:0] out_q);
 
   reg signed [37:0] sum_i, sum_q;
+  wire [37:0] cm_i_0, cm_i_1, cm_i_2, cm_i_3, cm_i_4;
+  wire [37:0] cm_q_0, cm_q_1, cm_q_2, cm_q_3, cm_q_4;
 
   assign out_i = sum_i;
   assign out_q = sum_q;
+   
+  assign cm_i_0 = {{5{mult_out_i_0[51]}},mult_out_i_0[50:18]};
+  assign cm_i_1 = {{5{mult_out_i_1[51]}},mult_out_i_1[50:18]};
+  assign cm_i_2 = {{5{mult_out_i_2[51]}},mult_out_i_2[50:18]};
+  assign cm_i_3 = {{5{mult_out_i_3[51]}},mult_out_i_3[50:18]};
+  assign cm_i_4 = {{5{mult_out_i_4[51]}},mult_out_i_4[50:18]};
+                                                             
+  assign cm_q_0 = {{5{mult_out_q_0[51]}},mult_out_q_0[50:18]};
+  assign cm_q_1 = {{5{mult_out_q_1[51]}},mult_out_q_1[50:18]};
+  assign cm_q_2 = {{5{mult_out_q_2[51]}},mult_out_q_2[50:18]};
+  assign cm_q_3 = {{5{mult_out_q_3[51]}},mult_out_q_3[50:18]};
+  assign cm_q_4 = {{5{mult_out_q_4[51]}},mult_out_q_4[50:18]};
+
 
   always @ (posedge clk or posedge reset)
   begin
@@ -755,29 +770,30 @@ module post_mult_adder             (input                    clk,
     end
     else
     begin
-      sum_i <= {{5{mult_out_i_0[50]}},mult_out_i_0[50:18]} + 
-               {{5{mult_out_i_1[50]}},mult_out_i_1[50:18]} + 
-               {{5{mult_out_i_2[50]}},mult_out_i_2[50:18]} + 
-               {{5{mult_out_i_3[50]}},mult_out_i_3[50:18]} +
-               {{5{mult_out_i_4[50]}},mult_out_i_4[50:18]};
+      sum_i <= {{5{mult_out_i_0[51]}},mult_out_i_0[50:18]} + 
+               {{5{mult_out_i_1[51]}},mult_out_i_1[50:18]} + 
+               {{5{mult_out_i_2[51]}},mult_out_i_2[50:18]} + 
+               {{5{mult_out_i_3[51]}},mult_out_i_3[50:18]} +
+               {{5{mult_out_i_4[51]}},mult_out_i_4[50:18]};
 
-      sum_q <= {{5{mult_out_q_0[50]}},mult_out_q_0[50:18]} + 
-               {{5{mult_out_q_1[50]}},mult_out_q_1[50:18]} + 
-               {{5{mult_out_q_2[50]}},mult_out_q_2[50:18]} + 
-               {{5{mult_out_q_3[50]}},mult_out_q_3[50:18]} +
-               {{5{mult_out_q_4[50]}},mult_out_q_4[50:18]};
+      sum_q <= {{5{mult_out_q_0[51]}},mult_out_q_0[50:18]} + 
+               {{5{mult_out_q_1[51]}},mult_out_q_1[50:18]} + 
+               {{5{mult_out_q_2[51]}},mult_out_q_2[50:18]} + 
+               {{5{mult_out_q_3[51]}},mult_out_q_3[50:18]} +
+               {{5{mult_out_q_4[51]}},mult_out_q_4[50:18]};
 
     end
   end
 
 endmodule
+//
 ///////////////////////////////////////////////////////////////////////////////
 // Module : accumulator
 //
 // Adds output of the 3 stages of multipliers
 ///////////////////////////////////////////////////////////////////////////////
 
-module accumulator( input                    clk,
+module accumulator( input            clk,
             input                    reset,
             input                    reset_acc,
             input  reg signed [37:0] a_i,
