@@ -4,7 +4,7 @@
 
 module top();
 
-const reg debug=1;
+const reg debug = 0;
 
 `protected
 0f1\HN.;>[ZEIa#f(_+)L3IL>fe5HAc?c\S;Y)Y>067+f,730)a6-)H:aI>=8JJ]
