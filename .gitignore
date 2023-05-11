@@ -6,3 +6,7 @@ simv.daidir/
 ucli.key
 *.sw*
 DW02*.v
+alib-52/
+default.svf
+firc_gates.v
+synres.txt

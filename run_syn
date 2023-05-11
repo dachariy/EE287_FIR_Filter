@@ -1,3 +1,9 @@
 #!/usr/bin/csh
+
+source /apps/design_environment.csh
+vcs -sverilog tbfir.svp
+if ($status != 0) exit $status
+./simv -l sim.log
+
 source /apps/design_environment.csh
 dc_shell -f synthesis.script | tee synres.txt

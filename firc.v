@@ -16,14 +16,14 @@ module firc (input  wire               Clk,
              input  reg  signed [26:0] CoefI,
              input  reg  signed [26:0] CoefQ,
              output wire               PushOut,
-             output wire        [31:0] FI,
-             output wire        [31:0] FQ);
+             output wire signed [31:0] FI,
+             output wire signed [31:0] FQ);
 
 
   // Wires and regs
   // Sample regs
-  wire [23:0] shift_reg_i_0;
-  wire [23:0] shift_reg_q_0;
+  wire signed [23:0] shift_reg_i_0;
+  wire signed [23:0] shift_reg_q_0;
 
   reg signed [23:0] shift_reg_i[28:0];
   reg signed [23:0] shift_reg_q[28:0];
@@ -89,18 +89,17 @@ module firc (input  wire               Clk,
 
   accumulator acc (.clk(Clk), .reset(Reset), .reset_acc(reset_acc_reg_flopped), .a_i(acc_rnd_out_i), .a_q(acc_rnd_out_q), .o_i(FI_d), .o_q(FQ_d));
 
-  data_pipe #(5) push_out_7_stage(.CLK(Clk), .RST(Reset), .A(reset_acc_reg), .A_FLOPPED(reset_acc_reg_flopped));
-  data_pipe #(6) push_out_5_stage(.CLK(Clk), .RST(Reset), .A(push_out_reg), .A_FLOPPED(push_out_reg_flopped));
+  data_pipe_5_stage reset_5_stage_pipe(.CLK(Clk), .RST(Reset), .A(reset_acc_reg), .A_FLOPPED(reset_acc_reg_flopped));
+  data_pipe_6_stage push_out_6_stage_pipe(.CLK(Clk), .RST(Reset), .A(push_out_reg), .A_FLOPPED(push_out_reg_flopped));
 
   //Coefficient Handling
-  always @ (posedge(Clk) or posedge(Reset))begin
+  always @ (posedge(Clk) or posedge(Reset))
+  begin
     if(Reset)begin
       //Resets Coefficients
       for(int i=0; i<16; i += 1)begin
         CoefI_temp[i] <= 27'b0;
         CoefQ_temp[i] <= 27'b0;
-        CoefIMem[i] <= 27'b0;
-        CoefQMem[i] <= 27'b0;
      end
     end
     //Stores Coefficients
@@ -110,12 +109,22 @@ module firc (input  wire               Clk,
     end
   end
 
-  always @ (posedge(PushIn))begin
+  always @ (posedge Clk or posedge Reset or posedge PushIn)
   begin
-    CoefIMem <= CoefI_temp;
-    CoefQMem <= CoefQ_temp;
+    if(Reset)begin
+      for(int i=0; i<16; i += 1)begin
+        CoefIMem[i] <= 27'b0;
+        CoefQMem[i] <= 27'b0;
+     end
+    end
+    else if(PushIn == 1)begin
+      for(int i=0; i<16; i += 1)begin
+        CoefIMem <= CoefI_temp;
+        CoefQMem <= CoefQ_temp;
+      end
+    end
   end
-  end
+
   // Sample Handling
   always@(posedge(Clk) or posedge(Reset))
   begin
@@ -134,8 +143,12 @@ module firc (input  wire               Clk,
     begin
       if(fifo_empty == 0)
       begin
-        shift_reg_i <= {shift_reg_i[27:0], shift_reg_i_0};
-        shift_reg_q <= {shift_reg_q[27:0], shift_reg_q_0};
+        shift_reg_i[28:1] <= shift_reg_i[27:0];
+        shift_reg_q[28:1] <= shift_reg_q[27:0];
+
+        shift_reg_i[0] <= shift_reg_i_0;
+        shift_reg_q[0] <= shift_reg_q_0;
+        
         shft_done <= 1;
       end
       else
@@ -423,28 +436,26 @@ endmodule
 // FIFO of word size 24 bits. Accepts/Puts Real and Imag part together in a clk
 // cycle. FiFO depth fixed to 4.
 ///////////////////////////////////////////////////////////////////////////////
-module fifo #(parameter DWIDTH=24)
+module fifo 
 (
     input wire clk,
     input wire rst,
     input wire rd,
     input wire wr,
-    input wire [DWIDTH-1:0] write_data1,
-    input wire [DWIDTH-1:0] write_data2,
+    input wire [23:0] write_data1,
+    input wire [23:0] write_data2,
     output wire empty,
     output wire full,
-    output wire [DWIDTH-1:0] read_data1,
-    output wire [DWIDTH-1:0] read_data2
+    output wire [23:0] read_data1,
+    output wire [23:0] read_data2
 
  );
 
-  parameter address_size = 2;// 4 address locations
-
-  reg [DWIDTH-1:0] mem1 [2**address_size-1:0];
-  reg [DWIDTH-1:0] mem2 [2**address_size-1:0];
-  reg [address_size-1:0] wr_ptr, rd_ptr;
-  reg [address_size-1:0] wr_ptr_next, rd_ptr_next;
-  reg [address_size-1:0] wr_ptr_succ, rd_ptr_succ;
+  reg [23:0] mem1 [3:0];
+  reg [23:0] mem2 [3:0];
+  reg [1:0] wr_ptr, rd_ptr;
+  reg [1:0] wr_ptr_next, rd_ptr_next;
+  reg [1:0] wr_ptr_succ, rd_ptr_succ;
 
   reg full_reg;
   reg empty_reg;
@@ -650,11 +661,11 @@ module accumulator( input            clk,
             input                    reset_acc,
             input  reg signed [37:0] a_i,
             input  reg signed [37:0] a_q,
-            output [31:0] o_i,
-            output [31:0] o_q);
+            output signed [31:0] o_i,
+            output signed [31:0] o_q);
 
-  reg [37:0] acc_i, acc_q;
-  wire [37:0] neg_rnd_i, neg_rnd_q;
+  reg signed [37:0] acc_i, acc_q;
+  wire signed [37:0] neg_rnd_i, neg_rnd_q;
 
   assign neg_rnd_i = acc_i + 4'b1000;
   assign neg_rnd_q = acc_q + 4'b1000;
@@ -682,19 +693,17 @@ module accumulator( input            clk,
 endmodule
 
 ///////////////////////////////////////////////////////////////////////////////
-// Module : data_pipe
+// Module : data_pipe_5_stage
 //
-// Adds data/signals through pipeline stages. 
+// Adds data/signals through 5 pipeline stages. 
 ///////////////////////////////////////////////////////////////////////////////
-module data_pipe #(parameter DEPTH = 3)(CLK, RST, A, A_FLOPPED);
-  parameter	WIDTH = 1;
-  //parameter DEPTH = 3;
+module data_pipe_5_stage (CLK, RST, A, A_FLOPPED);
 
-  input	 [WIDTH-1:0]	A;
+  input	 [0:0]	A;
   input			          RST,CLK;
-  output [WIDTH-1:0]	A_FLOPPED;
+  output [0:0]	A_FLOPPED;
 
-  reg	[WIDTH-1:0]	A_FLOPPED, a_piped[DEPTH];
+  reg	[0:0]	A_FLOPPED, a_piped[5];
 
   always @ (posedge CLK or posedge RST)
   begin
@@ -705,14 +714,14 @@ module data_pipe #(parameter DEPTH = 3)(CLK, RST, A, A_FLOPPED);
     end
     else
     begin
-      A_FLOPPED <= a_piped[DEPTH - 1];
+      A_FLOPPED <= a_piped[5 - 1];
       a_piped[0] <= A;
     end
   end
 
   genvar k;
   generate
-    for(k = 1; k < DEPTH; k++)
+    for(k = 1; k < 5; k++)
     begin
       always @ (posedge CLK or posedge RST)
       begin
@@ -728,5 +737,52 @@ module data_pipe #(parameter DEPTH = 3)(CLK, RST, A, A_FLOPPED);
     end
   endgenerate
 endmodule
+
+///////////////////////////////////////////////////////////////////////////////
+// Module : data_pipe_6_stage
+//
+// Adds data/signals through 6 pipeline stages. 
+///////////////////////////////////////////////////////////////////////////////
+module data_pipe_6_stage (CLK, RST, A, A_FLOPPED);
+
+  input	 [0:0]	A;
+  input			          RST,CLK;
+  output [0:0]	A_FLOPPED;
+
+  reg	[0:0]	A_FLOPPED, a_piped[6];
+
+  always @ (posedge CLK or posedge RST)
+  begin
+    if(RST)
+    begin
+      A_FLOPPED <= 0;
+      a_piped[0] <= 0;
+    end
+    else
+    begin
+      A_FLOPPED <= a_piped[6 - 1];
+      a_piped[0] <= A;
+    end
+  end
+
+  genvar k;
+  generate
+    for(k = 1; k < 6; k++)
+    begin
+      always @ (posedge CLK or posedge RST)
+      begin
+        if(RST)
+        begin
+          a_piped[k] <= 0;
+        end
+        else
+        begin
+          a_piped[k] <= a_piped[k-1];
+        end
+      end
+    end
+  endgenerate
+endmodule
+
 
 
