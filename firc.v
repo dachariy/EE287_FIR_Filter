@@ -79,11 +79,11 @@ module firc (input  wire               Clk,
   pre_mult_adder pre_add_3 (.clk(Clk), .reset(Reset), .a_i(data_i_3_loc_a), .a_q(data_q_3_loc_a), .b_i(data_i_3_loc_b), .b_q(data_q_3_loc_b), .o_i(a2m_i_3), .o_q(a2m_q_3));
   pre_mult_adder pre_add_4 (.clk(Clk), .reset(Reset), .a_i(data_i_4_loc_a), .a_q(data_q_4_loc_a), .b_i(data_i_4_loc_b), .b_q(data_q_4_loc_b), .o_i(a2m_i_4), .o_q(a2m_q_4));
 
-  ComplexMult cm_0(.clk(Clk), .reset(Reset), .data_i(a2m_i_0), .data_q(a2m_q_0), .coef_i(i_coef_reg1), .coef_q(q_coef_reg1), .mult_out_i(mult_out_i_0), .mult_out_q(mult_out_q_0));
-  ComplexMult cm_1(.clk(Clk), .reset(Reset), .data_i(a2m_i_1), .data_q(a2m_q_1), .coef_i(i_coef_reg2), .coef_q(q_coef_reg2), .mult_out_i(mult_out_i_1), .mult_out_q(mult_out_q_1));
-  ComplexMult cm_2(.clk(Clk), .reset(Reset), .data_i(a2m_i_2), .data_q(a2m_q_2), .coef_i(i_coef_reg3), .coef_q(q_coef_reg3), .mult_out_i(mult_out_i_2), .mult_out_q(mult_out_q_2));
-  ComplexMult cm_3(.clk(Clk), .reset(Reset), .data_i(a2m_i_3), .data_q(a2m_q_3), .coef_i(i_coef_reg4), .coef_q(q_coef_reg4), .mult_out_i(mult_out_i_3), .mult_out_q(mult_out_q_3));
-  ComplexMult cm_4(.clk(Clk), .reset(Reset), .data_i(a2m_i_4), .data_q(a2m_q_4), .coef_i(i_coef_reg5), .coef_q(q_coef_reg5), .mult_out_i(mult_out_i_4), .mult_out_q(mult_out_q_4));
+  ComplexMult cm_0(.clk(Clk), .reset(Reset), .data_i(a2m_i_0), .data_q(a2m_q_0), .coef_i(i_coef_reg1_d), .coef_q(q_coef_reg1_d), .mult_out_i(mult_out_i_0), .mult_out_q(mult_out_q_0));
+  ComplexMult cm_1(.clk(Clk), .reset(Reset), .data_i(a2m_i_1), .data_q(a2m_q_1), .coef_i(i_coef_reg2_d), .coef_q(q_coef_reg2_d), .mult_out_i(mult_out_i_1), .mult_out_q(mult_out_q_1));
+  ComplexMult cm_2(.clk(Clk), .reset(Reset), .data_i(a2m_i_2), .data_q(a2m_q_2), .coef_i(i_coef_reg3_d), .coef_q(q_coef_reg3_d), .mult_out_i(mult_out_i_2), .mult_out_q(mult_out_q_2));
+  ComplexMult cm_3(.clk(Clk), .reset(Reset), .data_i(a2m_i_3), .data_q(a2m_q_3), .coef_i(i_coef_reg4_d), .coef_q(q_coef_reg4_d), .mult_out_i(mult_out_i_3), .mult_out_q(mult_out_q_3));
+  ComplexMult cm_4(.clk(Clk), .reset(Reset), .data_i(a2m_i_4), .data_q(a2m_q_4), .coef_i(i_coef_reg5_d), .coef_q(q_coef_reg5_d), .mult_out_i(mult_out_i_4), .mult_out_q(mult_out_q_4));
 
   post_mult_adder post_add (.clk(Clk), .reset(Reset), .mult_out_i_0(mult_out_i_0), .mult_out_q_0(mult_out_q_0), .mult_out_i_1(mult_out_i_1), .mult_out_q_1(mult_out_q_1), .mult_out_i_2(mult_out_i_2), .mult_out_q_2(mult_out_q_2), .mult_out_i_3(mult_out_i_3), .mult_out_q_3(mult_out_q_3), .mult_out_i_4(mult_out_i_4), .mult_out_q_4(mult_out_q_4), .out_i(acc_rnd_out_i), .out_q(acc_rnd_out_q));
 
@@ -560,13 +560,38 @@ module ComplexMult(input                    clk,
 
   reg signed [51:0] prod_ac, prod_bd, prod_bc, prod_ad;
 
+  reg signed [25:0] mult_out_i_lower, mult_out_q_lower, mult_out_i_upper, mult_out_q_upper;
+
+  reg carry_i, carry_q;
+
   DW02_mult_2_stage #(25,27) AC(.A(data_i), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
   DW02_mult_2_stage #(25,27) BD(.A(data_q), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
   DW02_mult_2_stage #(25,27) BC(.A(data_q), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
   DW02_mult_2_stage #(25,27) AD(.A(data_i), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
 
-  assign mult_out_i = prod_ac - prod_bd;
-  assign mult_out_q = prod_bc + prod_ad;
+  // assign mult_out_i = prod_ac - prod_bd;
+  // assign mult_out_q = prod_bc + prod_ad;
+  assign mult_out_i = {(mult_out_i_upper + carry_i), mult_out_i_lower}; 
+  assign mult_out_q = {(mult_out_q_upper + carry_q), mult_out_q_lower}; 
+  
+  full_adder_26bit sub_ac_bd_l(.clk(clk), .reset(reset), .A(prod_ac[25:00]), .B(~prod_bd[25:00]), .CI(1'b1), .SUM(mult_out_i_lower), .CO(carry_i));
+  full_adder_26bit add_bc_ad_l(.clk(clk), .reset(reset), .A(prod_bc[25:00]), .B( prod_ad[25:00]), .CI(1'b0), .SUM(mult_out_q_lower), .CO(carry_q));
+  full_adder_26bit sub_ac_bd_u(.clk(clk), .reset(reset), .A(prod_ac[51:26]), .B(~prod_bd[51:26]), .CI(1'b0), .SUM(mult_out_i_upper), .CO());
+  full_adder_26bit add_bc_ad_u(.clk(clk), .reset(reset), .A(prod_bc[51:26]), .B( prod_ad[51:26]), .CI(1'b0), .SUM(mult_out_q_upper), .CO());
+  
+  //always @ (posedge clk or posedge reset)
+  //begin
+  //  if(reset)
+  //  begin
+  //    mult_out_i <= 0;
+  //    mult_out_q <= 0;
+  //  end
+  //  else
+  //  begin
+  //    mult_out_i <= {(mult_out_i_upper + carry_i), mult_out_i_lower}; 
+  //    mult_out_q <= {(mult_out_q_upper + carry_q), mult_out_q_lower}; 
+  //  end
+  //end
 
 endmodule
 
@@ -577,26 +602,15 @@ endmodule
 ///////////////////////////////////////////////////////////////////////////////
 module pre_mult_adder(input                    clk,
                       input                    reset,
-                      input  reg signed [23:0] a_i,
-                      input  reg signed [23:0] a_q,
-                      input  reg signed [23:0] b_i,
-                      input  reg signed [23:0] b_q,
-                      output reg signed [24:0] o_i,
-                      output reg signed [24:0] o_q);
+                      input  reg  signed [23:0] a_i,
+                      input  reg  signed [23:0] a_q,
+                      input  reg  signed [23:0] b_i,
+                      input  reg  signed [23:0] b_q,
+                      output wire signed [24:0] o_i,
+                      output wire signed [24:0] o_q);
 
-   always @ (posedge clk)
-   begin
-     if(reset)
-     begin
-       o_i <= 0;
-       o_q <= 0;
-     end
-     else
-     begin
-       o_i <= a_i + b_i;
-       o_q <= a_q + b_q;
-     end
-   end
+  assign o_i = a_i + b_i;
+  assign o_q = a_q + b_q;
 
 endmodule
 
@@ -784,5 +798,64 @@ module data_pipe_6_stage (CLK, RST, A, A_FLOPPED);
   endgenerate
 endmodule
 
+module full_adder_26bit (input clk,
+                         input reset,
+                         input [25:0]  A,
+                         input [25:0]  B,
+                         input         CI,
+                         output reg [25:0] SUM,
+                         output reg       CO);
 
 
+  // port decalrations
+  reg    [25 : 0]   sum_d;
+  reg               co_d;
+  reg    [25 : 0]   sum_out;
+  reg               c_out;
+
+  always @ (posedge clk or posedge reset)
+  begin
+    if(reset)
+    begin
+      SUM <= 0;
+      CO  <= 0;
+    end
+    else
+    begin
+      SUM <= sum_d;
+      CO  <= co_d;
+    end
+  end
+  
+  always @ (*) 
+  begin
+    plus(sum_out,c_out,A,B,CI);
+    sum_d = sum_out;
+    co_d  =  c_out;
+  end 
+
+  task plus;  
+     output  [25 : 0] sumout;
+     output                CO;
+     input   [25 : 0] A,B;
+     input                 CI;
+     reg     [25 : 0] sumout,SUM;
+     reg 	                 CO; 
+     reg 	                 carry; 
+     reg     [25 : 0] A,B;
+     integer               i;
+
+     begin
+       carry = CI;
+       for (i = 0; i <= 25; i = i + 1) 
+       begin 
+          sumout[i] = A[i] ^ B[i] ^ carry;
+          carry = (A[i] & B[i]) | (A[i] & carry) | (carry & B[i]);
+       end 
+       
+       SUM = sumout;
+       CO = carry;
+     end
+  endtask // task 
+
+  endmodule  // DW01_add;
