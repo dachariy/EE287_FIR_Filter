@@ -213,6 +213,6 @@ firc fir1(Clk,Reset,PushIn,StopIn,SampI,SampQ,PushCoef,CoefAddr,
 endmodule : top
 
 `include "firc.v"
-`include "DW02_mult_2_stage.v"
+`include "DW02_mult_3_stage.v"
 
 

@@ -564,10 +564,10 @@ module ComplexMult(input                    clk,
 
   reg carry_i, carry_q;
 
-  DW02_mult_2_stage #(25,27) AC(.A(data_i), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
-  DW02_mult_2_stage #(25,27) BD(.A(data_q), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
-  DW02_mult_2_stage #(25,27) BC(.A(data_q), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
-  DW02_mult_2_stage #(25,27) AD(.A(data_i), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
+  DW02_mult_3_stage #(25,27) AC(.A(data_i), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ac));
+  DW02_mult_3_stage #(25,27) BD(.A(data_q), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bd));
+  DW02_mult_3_stage #(25,27) BC(.A(data_q), .B(coef_i), .TC(1'b1), .CLK(clk), .PRODUCT(prod_bc));
+  DW02_mult_3_stage #(25,27) AD(.A(data_i), .B(coef_q), .TC(1'b1), .CLK(clk), .PRODUCT(prod_ad));
 
   // assign mult_out_i = prod_ac - prod_bd;
   // assign mult_out_q = prod_bc + prod_ad;
@@ -579,19 +579,19 @@ module ComplexMult(input                    clk,
   full_adder_26bit sub_ac_bd_u(.clk(clk), .reset(reset), .A(prod_ac[51:26]), .B(~prod_bd[51:26]), .CI(1'b0), .SUM(mult_out_i_upper), .CO());
   full_adder_26bit add_bc_ad_u(.clk(clk), .reset(reset), .A(prod_bc[51:26]), .B( prod_ad[51:26]), .CI(1'b0), .SUM(mult_out_q_upper), .CO());
   
-  //always @ (posedge clk or posedge reset)
-  //begin
-  //  if(reset)
-  //  begin
-  //    mult_out_i <= 0;
-  //    mult_out_q <= 0;
-  //  end
-  //  else
-  //  begin
-  //    mult_out_i <= {(mult_out_i_upper + carry_i), mult_out_i_lower}; 
-  //    mult_out_q <= {(mult_out_q_upper + carry_q), mult_out_q_lower}; 
-  //  end
-  //end
+  // always @ (posedge clk or posedge reset)
+  // begin
+  //   if(reset)
+  //   begin
+  //     mult_out_i <= 0;
+  //     mult_out_q <= 0;
+  //   end
+  //   else
+  //   begin
+  //     mult_out_i <= {(mult_out_i_upper + carry_i), mult_out_i_lower}; 
+  //     mult_out_q <= {(mult_out_q_upper + carry_q), mult_out_q_lower}; 
+  //   end
+  // end
 
 endmodule
 
@@ -634,33 +634,46 @@ module post_mult_adder   (input                    clk,
                           output reg signed [37:0] out_i,
                           output reg signed [37:0] out_q);
 
-  reg signed [37:0] sum_i, sum_q;
+  wire signed [37:0] sum_i, sum_q;
   assign out_i = sum_i;
   assign out_q = sum_q;
 
-  always @ (posedge clk or posedge reset)
-  begin
-    if(reset)
-    begin
-      sum_i <= 0;
-      sum_q <= 0;
-    end
-    else
-    begin
-      sum_i <= {{5{mult_out_i_0[51]}},mult_out_i_0[50:18]} +
-               {{5{mult_out_i_1[51]}},mult_out_i_1[50:18]} +
-               {{5{mult_out_i_2[51]}},mult_out_i_2[50:18]} +
-               {{5{mult_out_i_3[51]}},mult_out_i_3[50:18]} +
-               {{5{mult_out_i_4[51]}},mult_out_i_4[50:18]};
+  assign sum_i = {{5{mult_out_i_0[51]}},mult_out_i_0[50:18]} +
+             {{5{mult_out_i_1[51]}},mult_out_i_1[50:18]} +
+             {{5{mult_out_i_2[51]}},mult_out_i_2[50:18]} +
+             {{5{mult_out_i_3[51]}},mult_out_i_3[50:18]} +
+             {{5{mult_out_i_4[51]}},mult_out_i_4[50:18]};
 
-      sum_q <= {{5{mult_out_q_0[51]}},mult_out_q_0[50:18]} +
-               {{5{mult_out_q_1[51]}},mult_out_q_1[50:18]} +
-               {{5{mult_out_q_2[51]}},mult_out_q_2[50:18]} +
-               {{5{mult_out_q_3[51]}},mult_out_q_3[50:18]} +
-               {{5{mult_out_q_4[51]}},mult_out_q_4[50:18]};
+  assign sum_q = {{5{mult_out_q_0[51]}},mult_out_q_0[50:18]} +
+             {{5{mult_out_q_1[51]}},mult_out_q_1[50:18]} +
+             {{5{mult_out_q_2[51]}},mult_out_q_2[50:18]} +
+             {{5{mult_out_q_3[51]}},mult_out_q_3[50:18]} +
+             {{5{mult_out_q_4[51]}},mult_out_q_4[50:18]};
 
-    end
-  end
+
+  // always @ (posedge clk or posedge reset)
+  // begin
+  //   if(reset)
+  //   begin
+  //     sum_i <= 0;
+  //     sum_q <= 0;
+  //   end
+  //   else
+  //   begin
+  //     sum_i <= {{5{mult_out_i_0[51]}},mult_out_i_0[50:18]} +
+  //              {{5{mult_out_i_1[51]}},mult_out_i_1[50:18]} +
+  //              {{5{mult_out_i_2[51]}},mult_out_i_2[50:18]} +
+  //              {{5{mult_out_i_3[51]}},mult_out_i_3[50:18]} +
+  //              {{5{mult_out_i_4[51]}},mult_out_i_4[50:18]};
+
+  //     sum_q <= {{5{mult_out_q_0[51]}},mult_out_q_0[50:18]} +
+  //              {{5{mult_out_q_1[51]}},mult_out_q_1[50:18]} +
+  //              {{5{mult_out_q_2[51]}},mult_out_q_2[50:18]} +
+  //              {{5{mult_out_q_3[51]}},mult_out_q_3[50:18]} +
+  //              {{5{mult_out_q_4[51]}},mult_out_q_4[50:18]};
+
+  //   end
+  // end
 
 endmodule
 //
