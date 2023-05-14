@@ -117,10 +117,17 @@ module firc (input  wire               Clk,
         CoefQMem[i] <= 27'b0;
      end
     end
-    else if(PushIn == 1)begin
+    else if(PushIn)begin
       for(int i=0; i<16; i += 1)begin
-        CoefIMem <= CoefI_temp;
-        CoefQMem <= CoefQ_temp;
+        CoefIMem[i] <= CoefI_temp[i];
+        CoefQMem[i] <= CoefQ_temp[i];
+      end
+    end
+    else
+    begin
+      for(int i=0; i<16; i += 1)begin
+        CoefIMem[i] <= CoefIMem[i];
+        CoefQMem[i] <= CoefQMem[i]; 
       end
     end
   end
@@ -555,12 +562,12 @@ module ComplexMult(input                    clk,
                    input  reg signed [24:0] data_q,
                    input  reg signed [26:0] coef_i,
                    input  reg signed [26:0] coef_q,
-                   output reg signed [51:0] mult_out_i,
-                   output reg signed [51:0] mult_out_q);
+                   output reg [51:0] mult_out_i,
+                   output reg [51:0] mult_out_q);
 
-  reg signed [51:0] prod_ac, prod_bd, prod_bc, prod_ad;
+  reg [51:0] prod_ac, prod_bd, prod_bc, prod_ad;
 
-  reg signed [25:0] mult_out_i_lower, mult_out_q_lower, mult_out_i_upper, mult_out_q_upper;
+  reg [25:0] mult_out_i_lower, mult_out_q_lower, mult_out_i_upper, mult_out_q_upper;
 
   reg carry_i, carry_q;
 
@@ -621,20 +628,20 @@ endmodule
 ///////////////////////////////////////////////////////////////////////////////
 module post_mult_adder   (input                    clk,
                           input                    reset,
-                          input  reg signed [51:0] mult_out_i_0,
-                          input  reg signed [51:0] mult_out_q_0,
-                          input  reg signed [51:0] mult_out_i_1,
-                          input  reg signed [51:0] mult_out_q_1,
-                          input  reg signed [51:0] mult_out_i_2,
-                          input  reg signed [51:0] mult_out_q_2,
-                          input  reg signed [51:0] mult_out_i_3,
-                          input  reg signed [51:0] mult_out_q_3,
-                          input  reg signed [51:0] mult_out_i_4,
-                          input  reg signed [51:0] mult_out_q_4,
-                          output reg signed [37:0] out_i,
-                          output reg signed [37:0] out_q);
+                          input  reg [51:0] mult_out_i_0,
+                          input  reg [51:0] mult_out_q_0,
+                          input  reg [51:0] mult_out_i_1,
+                          input  reg [51:0] mult_out_q_1,
+                          input  reg [51:0] mult_out_i_2,
+                          input  reg [51:0] mult_out_q_2,
+                          input  reg [51:0] mult_out_i_3,
+                          input  reg [51:0] mult_out_q_3,
+                          input  reg [51:0] mult_out_i_4,
+                          input  reg [51:0] mult_out_q_4,
+                          output reg [37:0] out_i,
+                          output reg [37:0] out_q);
 
-  wire signed [37:0] sum_i, sum_q;
+  wire [37:0] sum_i, sum_q;
   assign out_i = sum_i;
   assign out_q = sum_q;
 
@@ -686,13 +693,13 @@ endmodule
 module accumulator( input            clk,
             input                    reset,
             input                    reset_acc,
-            input  reg signed [37:0] a_i,
-            input  reg signed [37:0] a_q,
-            output signed [31:0] o_i,
-            output signed [31:0] o_q);
+            input  reg [37:0] a_i,
+            input  reg [37:0] a_q,
+            output [31:0] o_i,
+            output [31:0] o_q);
 
-  reg signed [37:0] acc_i, acc_q;
-  wire signed [37:0] neg_rnd_i, neg_rnd_q;
+  reg [37:0] acc_i, acc_q;
+  wire [37:0] neg_rnd_i, neg_rnd_q;
 
   assign neg_rnd_i = acc_i + 4'b1000;
   assign neg_rnd_q = acc_q + 4'b1000;
